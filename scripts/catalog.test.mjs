@@ -24,3 +24,20 @@ test('Curated order, cover/cutout paths, and information aliases',()=>{
  const c=buildCatalog(root);for(const products of Object.values(c)){assert.deepEqual(products.map(p=>p.id),['b','a']);for(const p of products){assert.ok(p.coverImage.endsWith('cover.jpg'));assert.ok(p.cutoutImage.endsWith('cutout.png'));assert.ok(p.images[0].endsWith('main.jpg'));assert.equal(p.sizeGuide,'CUSTOM SIZE');assert.equal(p.fitReport,'CUSTOM FIT');assert.equal(p.delivery,'SOURCE DELIVERY');}}
  }finally{fs.rmSync(root,{recursive:true,force:true});}
 });
+
+test('Option data handles slash lists, ONE SIZE, NONE and multiline notes',async()=>{
+ const {normalizeOptions}=await import('./build-catalog.mjs');
+ assert.deepEqual(normalizeOptions('S / M / L'),['S','M','L']);
+ assert.deepEqual(normalizeOptions('ONE SIZE'),['ONE SIZE']);
+ assert.deepEqual(normalizeOptions('NONE'),[]);
+ assert.deepEqual(normalizeOptions(['NONE','ONE SIZE']),['ONE SIZE']);
+ assert.deepEqual(normalizeOptions('S / ONE SIZE'),['S','ONE SIZE']);
+ assert.deepEqual(normalizeOptions('黑色／白色'),['黑色','白色']);
+ const root=fs.mkdtempSync(path.join(os.tmpdir(),'iad-options-'));
+ try{
+ for(const [folder,notes] of [['SUMMER商品','Test\n顏色：黑色 / 白色\n尺寸：\nONE SIZE\n\n售價$280\n官網價$249'],['WINTER商品','Test\n顏色：NONE\n尺寸：S / M / L\n\n售價$590']]){
+ const base=path.join(root,folder,'test');fs.mkdirSync(base,{recursive:true});fs.writeFileSync(path.join(base,'商品資訊.txt'),notes);fs.writeFileSync(path.join(base,'main.jpg'),'fixture');
+ }
+ const c=buildCatalog(root);assert.deepEqual(c.summer[0].sizes,['ONE SIZE']);assert.deepEqual(c.summer[0].colors,['黑色','白色']);assert.deepEqual(c.winter[0].colors,[]);assert.deepEqual(c.winter[0].sizes,['S','M','L']);
+ }finally{fs.rmSync(root,{recursive:true,force:true});}
+});

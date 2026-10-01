@@ -20,3 +20,25 @@ dialog[data-mode="bag"]{background:#252a26ed}.bag-row{display:grid;grid-template
 @media(max-height:620px){.phone-nav{min-height:45px}.product-visual{padding-top:22px;padding-bottom:14px}.viewer-footer{padding-bottom:max(10px,env(safe-area-inset-bottom))}.viewer-price{margin-bottom:9px}.purchase{padding-top:8px}.purchase button{min-height:40px}#modal-content{padding-top:65px}.info-options,.info-section{margin-bottom:23px}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 .product-visual{background:var(--paper)}
+/* Viewer / grid refinement: retain the existing gate and loading styles. */
+.home-trigger svg{display:block;width:16px;height:16px;stroke:currentColor;stroke-width:1.15;stroke-linecap:round;stroke-linejoin:round}
+.home-trigger{width:44px}
+.phone-nav #season-name{text-align:center;align-self:center}
+.phone-nav span#season-name:hover{text-decoration:none}
+.grid-cover{width:100%;aspect-ratio:3/4;overflow:hidden;display:grid;place-items:center}
+.grid-cover img{width:100%;height:100%;aspect-ratio:auto;object-fit:contain;object-position:center}
+.grid-item .grid-name{font-size:10px;line-height:1.5;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;max-height:3em;overflow-wrap:anywhere}
+.grid-item small{font-size:9px;opacity:.72}
+.product-visual{padding:20px 18px 16px}
+.product-visual.has-cutout{padding:12px 8px}
+.info-trigger{top:70%;right:12%;font-size:8px;letter-spacing:.8px;text-decoration:none;display:flex;align-items:center;gap:5px;padding:8px;opacity:.7}
+.info-trigger span{font-size:12px;letter-spacing:0}
+.product-arrows{left:8px;right:8px;top:43%}
+.product-arrows button{font-size:16px;font-weight:300;opacity:.48}
+.product-arrows.used button{opacity:.2}
+.image-hints{position:absolute;left:13px;top:61%;display:flex;flex-direction:column;gap:0;z-index:2}
+.image-hints button{font-size:12px;min-width:34px;min-height:30px;opacity:.4;padding:3px;font-weight:300}
+.image-hints.used button{opacity:.22}
+.image-index{position:absolute;bottom:132px;left:50%;transform:translateX(-50%);font-size:8px;letter-spacing:1.2px;font-variant-numeric:tabular-nums;color:var(--muted);opacity:.65;pointer-events:none}
+.option-product{font-size:11px;opacity:.6;line-height:1.7;margin:0 0 36px}
+@media(max-height:620px){.product-visual{padding:14px 18px 10px}.product-visual.has-cutout{padding:8px}.image-index{bottom:110px}.info-trigger{top:66%}.image-hints{top:56%}}

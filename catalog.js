@@ -6,6 +6,10 @@ window.CATALOG = {
       "season": "summer",
       "price": 280,
       "salePrice": 249,
+      "description": "",
+      "material": "",
+      "fit": "",
+      "delivery": "",
       "colors": [
         "黑色",
         "白色",
@@ -17,10 +21,6 @@ window.CATALOG = {
         "M",
         "L"
       ],
-      "description": "",
-      "material": "",
-      "fit": "",
-      "delivery": "",
       "sort": 1,
       "featured": true,
       "images": [
@@ -47,6 +47,10 @@ window.CATALOG = {
       "season": "summer",
       "price": 280,
       "salePrice": 239,
+      "description": "",
+      "material": "",
+      "fit": "",
+      "delivery": "",
       "colors": [
         "灰色",
         "白色"
@@ -54,10 +58,6 @@ window.CATALOG = {
       "sizes": [
         "F"
       ],
-      "description": "",
-      "material": "",
-      "fit": "",
-      "delivery": "",
       "sort": 2,
       "featured": false,
       "images": [
@@ -87,6 +87,10 @@ window.CATALOG = {
       "season": "winter",
       "price": 590,
       "salePrice": 490,
+      "description": "",
+      "material": "",
+      "fit": "",
+      "delivery": "",
       "colors": [
         "灰色",
         "咖啡",
@@ -99,10 +103,6 @@ window.CATALOG = {
         "M",
         "L"
       ],
-      "description": "",
-      "material": "",
-      "fit": "",
-      "delivery": "",
       "sort": 1,
       "featured": true,
       "images": [
@@ -125,6 +125,10 @@ window.CATALOG = {
       "season": "winter",
       "price": 1080,
       "salePrice": 880,
+      "description": "",
+      "material": "",
+      "fit": "",
+      "delivery": "",
       "colors": [
         "迷彩"
       ],
@@ -132,10 +136,6 @@ window.CATALOG = {
         "L",
         "XL"
       ],
-      "description": "",
-      "material": "",
-      "fit": "",
-      "delivery": "",
       "sort": 2,
       "featured": false,
       "images": [
