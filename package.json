@@ -1,0 +1,4 @@
+{
+  "name": "iad-shop", "version": "1.0.0", "private": true,
+  "scripts": {"build": "node scripts/build-catalog.mjs", "test": "node --test scripts/catalog.test.mjs", "start": "node scripts/server.mjs"}
+}

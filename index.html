@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="zh-Hant"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#eeeae2"><meta name="description" content="IAD SHOP — Selected goods, all seasons. 季節選物與日常穿搭。"><title>IAD SHOP — A season of your own.</title><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23262624'/%3E%3Ctext x='32' y='43' text-anchor='middle' fill='%23eeeae2' font-family='Arial' font-size='28'%3EIAD%3C/text%3E%3C/svg%3E"><link rel="stylesheet" href="style.css"></head>
+<body>
+<main class="scene">
+  <div class="backdrop" aria-hidden="true"><img id="look" alt="" hidden><div class="wash"></div></div>
+  <div class="device"><div class="screen" id="screen">
+    <section id="opening" aria-label="選擇季節">
+      <button class="season summer" data-season="summer" aria-label="SUMMER"><video autoplay muted loop playsinline preload="auto" aria-hidden="true" src="./首頁影片/SUMMER(上方).mp4"></video><span class="season-title">SUMMER</span></button>
+      <button class="season winter" data-season="winter" aria-label="WINTER"><video autoplay muted loop playsinline preload="metadata" aria-hidden="true" src="./首頁影片/WINTE(下方).mp4"></video><span class="season-title">WINTER</span></button>
+    </section>
+    <section id="shop" hidden aria-label="季節商品瀏覽">
+      <header class="phone-nav"><button data-back aria-label="返回季節首頁">↖ BACK</button><button data-overview id="season-name">SUMMER</button><span id="item-number">01 / 02</span><button data-bag>BAG <span class="bag-count">(0)</span></button></header>
+      <div id="product" tabindex="-1"></div>
+    </section>
+    <div id="toast" role="status" aria-live="polite"></div>
+  </div></div>
+</main>
+<dialog id="modal" aria-labelledby="modal-title"><form method="dialog"><button class="close" aria-label="關閉">✕</button></form><div id="modal-content"></div></dialog>
+<script src="catalog.js"></script><script src="app.js"></script>
+</body></html>
