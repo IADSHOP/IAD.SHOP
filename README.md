@@ -1,50 +1,69 @@
-# IAD SHOP — 正式版第一階段
+# IAD SHOP — Interactive Lookbook
 
-純 HTML / CSS / JavaScript 靜態網站，可部署至 GitHub Pages。正式素材保留在原始資料夾，reference/ 只供參考，不會發布。
+正式網站：https://iadshop.github.io/IAD.SHOP/
+Repository：https://github.com/IADSHOP/IAD.SHOP
 
-## 預覽與商品更新
+此版本在既有第一階段專案上簡化商品體驗，保留原有 SUMMER / WINTER 入口、字體、細線、動畫與 PC 中央手機架構。
 
-安裝 Node.js 後執行：
+## 五個核心狀態
+
+- SEASON GATE：兩支影片上下各佔一半，首頁只顯示 SUMMER / WINTER。
+- PRODUCT VIEWER：一次一件商品；只常駐主視覺、INFO、小箭頭、優惠價格、ADD 與立即購買。
+- SEASON GRID：頂部季節按鈕開啟同季節兩欄商品牆，顯示 cover、名稱、優惠價，可上下捲動。
+- INFO OVERLAY：手機範圍內黑霧 / blur / 白字，沒有白色卡片或方框。資料過長時只有浮層內部捲動。
+- BAG：同一手機範圍的浮層，顯示商品、顏色、尺寸、單價、數量、移除、TOTAL 與 CHECKOUT。
+
+## 首頁影片載入
+
+原始 SUMMER(上方).mp4 與 WINTE(下方).mp4 完整保留。播放檔改用相同原始影片產生的 720px / H.264 / 24fps / faststart 網頁版本，不更換畫面内容，移除無需播放的音軌：summer-web.mp4 約 0.77 MB，winter-web.mp4 約 0.55 MB。
+
+兩支影片均有 autoplay、muted、loop、playsinline、preload=auto、cover。開啟時整個入口隱藏且不能點擊，只顯示 LOADING。Promise.all 等待兩支都到 canplay（readyState >= 3），重設播放時間後同一批開始播放，再讓整個 gate 一次淡入。
+
+每支最多等待 9 秒；播放啟動另有 1.5 秒上限。任何一支失敗、逾時或 autoplay 被阻擋，兩支一起停止、一起使用由原影片擷取的 poster，不會讓一半播放、一半空白，也不會事後讓其中一半突然冒出影片。仍可直接點入商品。
+
+## 商品與照片操作
+
+首頁季節入口直接進入該季第一件商品，不先進 grid。
+
+圖片區：水平手指 swipe / 滑鼠 drag / 觸控板橫滑換商品；垂直操作換同商品照片。方向必須超過另一軸的 1.35 倍才鎖定，鎖定後只有一軸作用，避免斜滑同時切換。鍵盤左右鍵換商品，上下鍵換照片；小箭頭也可換商品。第一件僅顯示下一件箭頭，最後一件只顯示上一件；商品不循環，照片循環。
+
+每個商品的照片位置、顏色、尺寸在本次頁面工作階段中記憶。INFO 開關不重建商品畫面；grid 返回也保留原商品，點其他商品直接返回 viewer 指定位置。重新整理會重置照片與選項；購物袋透過 localStorage 保留。
+
+## INFO 與購買
+
+原本常駐的商品名稱、原價、COLOR / SIZE 表格與大塊選項全部移入 INFO。僅顯示正式來源已有資料，不補寫缺少的材質、描述或出貨資訊。
+
+INFO 裡可以選色與尺寸。若直接按 ADD 或立即購買而尚未選齊，開啟同款黑霧選項浮層，確認選項後才加入袋子。立即購買進入 BAG 的購買預覽；CHECKOUT 沒有金流、付款或正式訂單。
+
+BAG 支援 +/- 數量、REMOVE、TOTAL，保存至該瀏覽器。舊版數字價格的購物袋可相容讀入。
+
+## PC / MOBILE
+
+手機佔滿 viewport，無手機外框與外圍裝飾，使用 100dvh / 100svh 與 safe-area；正常商品畫面不能上下捲動。桌機（寬度 > 760px）僅中央手機框，外圍維持抽象季節背景，所有浮層也限制在手機內。
+
+## 商品資料更新
 
     node scripts/build-catalog.mjs
+    node --test --test-isolation=none scripts/catalog.test.mjs
     node scripts/server.mjs
 
-開啟 http://127.0.0.1:4173 。驗證資料：
+預覽：http://127.0.0.1:4173/
 
-    node --test --test-isolation=none scripts/catalog.test.mjs
+商品來源仍為 SUMMER商品 / WINTER商品 的各子資料夾：商品資訊.txt 與圖片。讀取名稱、編號、價格、官網價、顏色、尺寸、尺寸表及試穿報告。尺寸資訊提供 sizeGuide / sizeInfo 相容欄位；試穿提供 fitReport / tryOn。
 
-商品生成器讀取 SUMMER商品、WINTER商品 的各商品資料夾內「商品資訊.txt」。第一行為名稱，讀取編號、顏色、尺寸、售價、官網價，保留尺寸區塊及試穿報告。缺少的描述、材質、版型不自行補寫。
+可選 product.json 支援 id、name、sort、featured、description、material、fit、delivery、coverImage、cutoutImage、images 等欄位。coverImage / cutoutImage / images 都填該商品資料夾內的檔名，生成器轉成相對網址，優先 cutout 作为 viewer 第一張，cover 作为 grid 圖片。sort 優先排序，沒有時依資料夾列出順序；同排序時 featured 優先。沒有推薦演算法。
 
-新增商品放入同樣結構後重新生成 catalog.js。可在商品資料夾增加 product.json 指定 id、sort、featured、description、material、fit、shipping、coverImage、cutoutImage。排序以 sort 優先，預設採資料夾列出順序。coverImage、cutoutImage 填該商品資料夾內的圖片檔名。請用穩定 id，以免日後新增商品影響分享連結。
+建議新增商品時固定 id 與 sort，讓分享網址與策展排序穩定。新增資料夾、素材後重新生成 catalog.js，即可擴充到 30–50 件以上。
 
-## 操作
+## 部署
 
-首頁只有原始 SUMMER / WINTER 影片，兩區各佔一半。手機滿版；桌機中央手機框。影片 autoplay / muted / loop / playsinline / cover。
+Pages Source 已設定 GitHub Actions，push main 後 .github/workflows/pages.yml 會生成資料、驗證並部署。所有網站資源均為相對路徑；不發布 reference/ 或 .tools/。素材生成結果已提交，CI 不需要影片處理套件。
 
-進入季節後一次一件商品，拖曳主圖、觸控左右滑、觸控板水平滑、鍵盤左右鍵、畫面小箭頭切換。顏色與尺寸依商品保留。INFO 以白色 modal 開啟，背景遮罩，X / Escape / 點擊外圍可關閉。點季節名稱開啟兩欄總覽並跳至商品。
+若需要重產影片，scripts/prepare-video.py 使用 imageio-ffmpeg；本地套件位於忽略的 .tools/python-packages，原片不被覆寫。
 
-ADD TO CART 及 BUY NOW 都需要顏色及尺寸；購物袋存放在瀏覽器 localStorage。BUY NOW 只呈現購買預覽，不付款、不建立訂單。未串接金流、會員、物流或庫存。商品圖片點擊目前也開 INFO；images 資料保留未來照片展開用途，避免與商品 swipe 衝突。
+## 此輪修改檔案
 
-## GitHub Pages 部署
+index.html、style.css、app.js、catalog.js、scripts/build-catalog.mjs、scripts/catalog.test.mjs、README.md。
+新增 scripts/prepare-video.py 與 首頁影片/ 下 summer-web.mp4、winter-web.mp4、summer-poster.jpg、winter-poster.jpg。
 
-1. 建立 GitHub repository（建議 iad-shop），上傳本專案至 main 分支。不要上傳 reference/。
-2. Repository → Settings → Pages → Source 選 GitHub Actions。
-3. Actions 中執行 Deploy GitHub Pages（push main 也會自動執行）。
-4. 成功後網址為 https://你的帳號.github.io/iad-shop/ 。部署 workflow 會重新生成商品、驗證資料並發布必要網站及素材。
-
-GitHub 連接器已確認 IADSHOP 帳號授權，但可用 repository 清單為空，連接器沒有建立 repository 或設定 Pages 工具。瀏覽器進入建立 repository 頁面時要求登入；本機也沒有 GitHub CLI。因此已建立本地 Git 版本，尚未 push 或取得正式網址。只差在 GitHub 登入並建立 iad-shop repository、連結遠端推送及啟用 Pages。HTML、圖片、影片都使用相對路徑，hash 商品連結可直接重新整理。
-
-SUMMER 原影片約 68 MB，完整保留指定素材。下一階段可另產出保留同內容的壓縮版本，改善行動網路首次載入，並確認商品主圖、排序及品牌購買流程。
-
-## 主要檔案
-
-index.html：首頁及介面容器
-style.css：手機 / 桌機、季節氛圍、RWD
-app.js：商品瀏覽、選項、資訊、總覽、購物袋
-catalog.js：由正式素材生成的商品資料
-scripts/build-catalog.mjs：商品資料生成
-scripts/catalog.test.mjs：四商品欄位及路徑驗證
-scripts/server.mjs：支援影片 range 的預覽伺服器
-.github/workflows/pages.yml：GitHub Pages 自動部署
-.nojekyll：靜態檔案發布
-
+驗證涵蓋四件正式商品資料 / 路徑，策展排序與 metadata 欄位；瀏覽器驗證正常雙影片播放、單影片失敗的雙 poster fallback、商品與照片拖曳、INFO 保留選項、grid 跳轉、BAG 與手機 / 桌機版型。沒有實作付款、會員、正式庫存、物流或後台。

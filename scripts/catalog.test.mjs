@@ -7,3 +7,20 @@ test('Official product notes and Pages paths',()=>{
  assert.deepEqual(c.summer.map(p=>p.salePrice),[249,239]);assert.deepEqual(c.winter.map(p=>p.salePrice),[490,880]);
  for(const products of Object.values(c))for(const p of products){assert.ok(p.colors.length);assert.ok(p.sizes.length);assert.ok(p.sizeInfo);assert.ok(p.tryOn);for(const image of p.images){assert.ok(image.startsWith('./'));assert.ok(fs.existsSync(decodeURIComponent(image)));}}
 });
+
+import os from 'node:os';
+import path from 'node:path';
+test('Curated order, cover/cutout paths, and information aliases',()=>{
+ const root=fs.mkdtempSync(path.join(os.tmpdir(),'iad-catalog-'));
+ try{
+ for(const folder of ['SUMMER商品','WINTER商品']){
+ for(const [name,sort] of [['a',20],['b',1]]){
+ const base=path.join(root,folder,name);fs.mkdirSync(base,{recursive:true});
+ fs.writeFileSync(path.join(base,'商品資訊.txt'),'Test\n顏色 白色\n尺寸 F\n售價$280\n官網價$239\n\n尺寸\n衣長33\n\n試穿報告\nMODEL 165/54');
+ for(const image of ['main.jpg','cover.jpg','cutout.png'])fs.writeFileSync(path.join(base,image),'image-fixture');
+ fs.writeFileSync(path.join(base,'product.json'),JSON.stringify({id:name,sort,coverImage:'cover.jpg',cutoutImage:'cutout.png',images:['main.jpg'],sizeGuide:'CUSTOM SIZE',fitReport:'CUSTOM FIT',delivery:'SOURCE DELIVERY'}));
+ }
+ }
+ const c=buildCatalog(root);for(const products of Object.values(c)){assert.deepEqual(products.map(p=>p.id),['b','a']);for(const p of products){assert.ok(p.coverImage.endsWith('cover.jpg'));assert.ok(p.cutoutImage.endsWith('cutout.png'));assert.ok(p.images[0].endsWith('main.jpg'));assert.equal(p.sizeGuide,'CUSTOM SIZE');assert.equal(p.fitReport,'CUSTOM FIT');assert.equal(p.delivery,'SOURCE DELIVERY');}}
+ }finally{fs.rmSync(root,{recursive:true,force:true});}
+});
