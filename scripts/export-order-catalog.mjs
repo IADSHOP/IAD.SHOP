@@ -1,0 +1,11 @@
+import fs from 'node:fs';
+import vm from 'node:vm';
+import crypto from 'node:crypto';
+const context={window:{}};vm.runInNewContext(fs.readFileSync('catalog.js','utf8'),context);
+const products=Object.values(context.window.CATALOG).flat().map(p=>({id:p.id,season:p.season,name:p.name,price:Number(p.price),salePrice:Number(p.salePrice),colors:p.colors,sizes:p.sizes,images:p.images,coverImage:p.coverImage||p.images[0]}));
+const version=crypto.createHash('sha256').update(JSON.stringify(products)).digest('hex').slice(0,20);
+fs.mkdirSync('apps-script',{recursive:true});
+fs.writeFileSync('apps-script/Catalog.gs','// Generated from the same catalog as the storefront. Redeploy Apps Script after updating.\nconst ORDER_CATALOG_VERSION = '+JSON.stringify(version)+';\nconst ORDER_PRODUCTS = '+JSON.stringify(products,null,2)+';\n');
+fs.copyFileSync('order-core.js','apps-script/Core.gs');
+fs.writeFileSync('order-catalog-version.js','window.IAD_ORDER_CATALOG_VERSION = '+JSON.stringify(version)+';\n');
+console.log('Order catalog exported:',products.length,'products; version',version);

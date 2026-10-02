@@ -1,0 +1,1 @@
+orderId	createdAt	customerName	customerPhone	customerEmail	deliveryMethod	receiverName	receiverPhone	storeType	storeName	storeCode	postalCode	address	paymentMethod	paymentStatus	subtotal	shippingFee	total	orderStatus	itemsJson	buyerNote	paymentReportedAt	paymentReference	paymentTime	paymentNote	requestId	requestHash	accessTokenHash	reportRequestId	emailStatus

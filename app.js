@@ -94,7 +94,7 @@ function optionOverlay(intent){purchaseIntent=intent;const p=current();openModal
 function select(field,value){selection()[field]=value;document.querySelectorAll(`[data-${field}]`).forEach(b=>{const active=b.dataset[field]===value;b.classList.toggle('selected',active);b.setAttribute('aria-pressed',active);});}
 function add(intent,confirmed=false){const p=current(),s=selection();if((p.colors.length&&!s.color)||(p.sizes.length&&!s.size)){if(confirmed){$('.selection-note').textContent='請先選擇顏色與尺寸';return;}optionOverlay(intent);return;}
  const itemKey=[season,p.id,s.color,s.size].join('|');const found=bag.find(p=>p.key===itemKey);if(found)found.qty++;else bag.push({key:itemKey,id:p.id,season,name:p.name,color:s.color,size:s.size,qty:1,price:Number(p.salePrice||p.price),image:productImage(p)});updateBag();purchaseIntent=null;if($('#modal').open)$('#modal').close();if(intent==='buy')showBag();else notify('ADDED TO BAG');}
-function showBag(checkout=false){purchaseIntent=null;const total=bag.reduce((n,p)=>n+Number(p.price)*p.qty,0);openModal(`<div class="bag-content"><h2 id="modal-title">${checkout?'CHECKOUT':'BAG'}</h2>${checkout?'<p class="bag-note">購買預覽。此階段不會付款或建立正式訂單。</p>':''}${bag.length?bag.map((p,i)=>`<article class="bag-row">${p.image?`<img src="${esc(p.image)}" alt="${esc(p.name)}">`:''}<div><strong>${esc(p.name)}</strong><p>${esc(p.color)} / ${esc(p.size)}</p><span>${money(p.price)}</span><div class="quantity"><button data-qty="${i}" data-delta="-1" aria-label="減少 ${esc(p.name)} 數量" ${p.qty<=1?'disabled':''}>−</button><span>${p.qty}</span><button data-qty="${i}" data-delta="1" aria-label="增加 ${esc(p.name)} 數量">+</button><button data-remove="${i}" class="remove">REMOVE</button></div></div></article>`).join(''):'<p class="bag-note">購物袋還是空的。</p>'}<div class="bag-total"><span>TOTAL</span><span>${money(total)}</span></div><button class="overlay-action" data-checkout ${!bag.length?'disabled':''}>CHECKOUT →</button><p class="bag-note">尚未開放付款與正式訂單。</p></div>`,'bag');}
+function showBag(){window.IADCommerce.showBag();}
 document.addEventListener('click',e=>{const b=e.target.closest('button');if(!b||b.disabled)return;
  if(b.hasAttribute('data-season')){season=b.dataset.season;index=0;go(route());}
  if(b.hasAttribute('data-back'))go('');
@@ -110,7 +110,7 @@ document.addEventListener('click',e=>{const b=e.target.closest('button');if(!b||
  if(b.hasAttribute('data-bag'))showBag();
  if(b.hasAttribute('data-remove')){bag.splice(Number(b.dataset.remove),1);updateBag();showBag();}
  if(b.hasAttribute('data-qty')){const item=bag[Number(b.dataset.qty)];item.qty=Math.max(1,item.qty+Number(b.dataset.delta));updateBag();showBag();}
- if(b.hasAttribute('data-checkout'))showBag(true);
+
 });
 document.addEventListener('keydown',e=>{if(view!=='browse'||$('#modal').open||e.altKey||e.ctrlKey||e.metaKey)return;if(['ArrowLeft','ArrowRight'].includes(e.key)){e.preventDefault();step(e.key==='ArrowRight'?1:-1);}if(['ArrowUp','ArrowDown'].includes(e.key)){e.preventDefault();changePhoto(e.key==='ArrowDown'?1:-1);}});
 $('#modal').addEventListener('close',()=>{purchaseIntent=null;});
@@ -118,3 +118,5 @@ window.addEventListener('resize',()=>{if($('#modal').open)placeModal();if(view==
 window.visualViewport?.addEventListener('resize',()=>{if($('#modal').open)placeModal();});
 window.addEventListener('popstate',applyRoute);window.addEventListener('hashchange',applyRoute);
 applyRoute();prepareGate();updateBag();
+
+window.IADShopBridge = {catalog, esc, money, notify, openModal, getBag:()=>bag.map(item=>({...item})), setBag:items=>{bag=items;updateBag();}};

@@ -33,7 +33,7 @@ Repository：https://github.com/IADSHOP/IAD.SHOP
 
 原本常駐的商品名稱、原價、COLOR / SIZE 表格與大塊選項全部移入 INFO。僅顯示正式來源已有資料，不補寫缺少的材質、描述或出貨資訊。
 
-INFO 裡可以選色與尺寸。若直接按 ADD 或立即購買而尚未選齊，開啟同款黑霧選項浮層，確認選項後才加入袋子。立即購買選完必要選項後直接開啟 BAG；CHECKOUT 沒有金流、付款或正式訂單。
+INFO 裡可以選色與尺寸。若直接按 ADD 或立即購買而尚未選齊，開啟同款黑霧選項浮層，確認選項後才加入袋子。立即購買選完必要選項後直接開啟 BAG；新版 CHECKOUT 接續四步表單與 Apps Script 訂單系統，詳見 ORDER-SETUP.md。
 
 BAG 支援 +/- 數量、REMOVE、TOTAL，保存至該瀏覽器。舊版數字價格的購物袋可相容讀入。
 
@@ -82,3 +82,10 @@ Viewer 一般圖水平內距由 30px 改為 18px，390px 畫面可用寬度由 3
 OPTION OVERLAY 與 INFO 分開內容但沿用同一種霧黑視覺：SELECT OPTION / SELECT SIZE，仅呈現需要挑選的多選項，沒有額外尺寸表。顏色與尺寸由商品資訊.txt 或 product.json 生成；支援 S / M / L、全形斜線、換行、ONE SIZE、NONE。ONE SIZE 保留為一個完整值；NONE / 空值生成空陣列。單一尺寸（包含 F）或顏色自動選定，多個值且尚未選定才開浮層。ADD 確認後關閉浮層並留在商品；立即購買則加入後直接開 BAG。
 
 本輪變更：index.html、style.css、app.js、catalog.js、scripts/build-catalog.mjs、scripts/catalog.test.mjs、README.md。首頁影片、loading 與 PC 中央手機架構不變。
+
+
+## 第一版購物袋、結帳與訂單
+
+已加入配送計價、四步 CHECKOUT、Google Apps Script 訂單與付款回報、正式付款 QR 圖。Google 部署尚待設定，未設定前最後確認按鈕停用。完整設定、欄位、測試、人工對帳與發布步驟請看 [ORDER-SETUP.md](ORDER-SETUP.md)。
+
+商品更新請使用 npm run build，再同步 apps-script/Catalog.gs 到 Google 部署；npm test 驗證商品與訂單規則。
