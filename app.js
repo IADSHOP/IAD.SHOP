@@ -49,8 +49,9 @@ async function showGate(){
 function renderViewer(){
  const p=current();view='browse';$('#product').className='viewer-host';$('#shop').setAttribute('aria-label','商品瀏覽');
  $('#product').innerHTML=`<article class="product-browser" aria-label="${esc(p.name)}，左右切換商品，上下切換照片">
-  <div class="product-visual ${p.cutoutImage&&photoIndex()===0?'has-cutout':''}" aria-label="商品主視覺"><img src="${esc(displayedImage())}" alt="${esc(p.name)} 商品照片 ${photoIndex()+1}" draggable="false" fetchpriority="high"></div>
-  <button class="info-trigger" data-info aria-label="INFO"><span aria-hidden="true">ⓘ</span> INFO</button>
+  <div class="product-visual ${p.cutoutImage&&photoIndex()===0?'has-cutout':''}" aria-label="商品主視覺"><img src="${esc(displayedImage())}" alt="${esc(p.name)} 商品照片 ${photoIndex()+1}" draggable="false" fetchpriority="high">
+   <button class="info-trigger" data-info aria-label="INFO"><span aria-hidden="true">ⓘ</span> INFO</button>
+  </div>
   ${galleryImages(p).length>1?`<div class="image-hints ${verticalHintUsed?'used':''}"><button data-photo="-1" aria-label="上一張商品照片">↑</button><button data-photo="1" aria-label="下一張商品照片">↓</button></div><span class="image-index" aria-label="圖片位置" aria-live="polite">${count(photoIndex()+1)} / ${count(galleryImages(p).length)}</span>`:''}
   <div class="product-arrows ${horizontalHintUsed?'used':''}"><button data-step="-1" aria-label="上一件商品" ${index===0?'hidden':''}>←</button><button data-step="1" aria-label="下一件商品" ${index===catalog[season].length-1?'hidden':''}>→</button></div>
   <div class="viewer-footer"><span class="viewer-price">${money(p.salePrice||p.price)}</span><div class="purchase"><button data-add><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 7h14l1 14H4L5 7Z M8 7V5a4 4 0 0 1 8 0v2"/></svg>ADD</button><button class="primary" data-buy>立即購買 <span>→</span></button></div></div>
@@ -59,7 +60,7 @@ function renderViewer(){
  fitProductImage();
  const next=catalog[season][index+1];if(next){const preload=new Image();preload.src=productImage(next);}
 }
-function fitProductImage(){const image=$('.product-visual img');const fit=()=>{if(!image.naturalWidth)return;const ratio=image.naturalWidth/image.naturalHeight,box=image.clientWidth/image.clientHeight;image.style.objectFit=Math.abs(ratio/box-1)<.005?'cover':'contain';};image.addEventListener('load',fit,{once:true});fit();}
+function fitProductImage(){const image=$('.product-visual img');const fit=()=>{if(!image.naturalWidth)return;const ratio=image.naturalWidth/image.naturalHeight,box=image.clientWidth/image.clientHeight;const cover=Math.abs(ratio/box-1)<.005;image.style.objectFit=cover?'cover':'contain';const visual=image.parentElement,width=cover?image.clientWidth:Math.min(image.clientWidth,image.clientHeight*ratio),height=cover?image.clientHeight:Math.min(image.clientHeight,image.clientWidth/ratio);visual.style.setProperty('--info-top',`${image.offsetTop+(image.clientHeight-height)/2+16}px`);visual.style.setProperty('--info-right',`${visual.clientWidth-image.offsetLeft-image.clientWidth+(image.clientWidth-width)/2+16}px`);};image.addEventListener('load',fit,{once:true});fit();}
 function renderGrid(){view='grid';$('#product').className='grid-host';$('#shop').setAttribute('aria-label',season.toUpperCase()+' 商品牆');$('#product').innerHTML=`<div class="season-grid">${catalog[season].map((p,i)=>`<button class="grid-item" data-jump="${i}" aria-label="查看 ${esc(p.name)}"><div class="grid-cover"><img src="${esc(p.coverImage||p.images[0])}" alt="${esc(p.name)}" loading="lazy"></div><span class="grid-name">${esc(p.name)}</span><small>${money(p.salePrice||p.price)}</small></button>`).join('')}</div>`;}
 function render(){document.body.dataset.season=season;$('#season-name').textContent=season.toUpperCase();const title=$('#season-name');title.replaceWith(Object.assign(document.createElement(view==='grid'?'span':'button'),{id:'season-name',textContent:season.toUpperCase()}));if(view!=='grid')$('#season-name').setAttribute('data-overview','');$('[data-back]').setAttribute('aria-label','返回季節首頁');view==='grid'?renderGrid():renderViewer();updateBag();}
 function applyRoute(){run++;switching=false;purchaseIntent=null;if($('#modal').open)$('#modal').close();$('#toast').classList.remove('show');const parts=location.hash.slice(1).split('/');
@@ -76,7 +77,7 @@ async function step(delta,gesture=false){if(view!=='browse'||switching||$('#moda
 }
 function changePhoto(delta,gesture=false){if(view!=='browse'||switching||$('#modal').open)return;if(gesture)verticalHintUsed=true;const p=current(),next=(photoIndex()+delta+galleryImages(p).length)%galleryImages(p).length;photos.set(key(),next);const hint=$('.image-hints');if(hint)hint.classList.toggle('used',verticalHintUsed);const position=$('.image-index');if(position)position.textContent=`${count(next+1)} / ${count(galleryImages(p).length)}`;const image=$('.product-visual img');image.src=displayedImage();image.alt=`${p.name} 商品照片 ${next+1}`;fitProductImage();$('.product-visual').classList.toggle('has-cutout',!!p.cutoutImage&&next===0);if(!reduced.matches)image.animate([{opacity:.35,transform:`translateY(${delta*14}px)`},{opacity:1,transform:'translateY(0)'}],{duration:220});}
 function bindGestures(el){let start=null,axis=null,suppressUntil=0;const reset=()=>{start=null;axis=null;el.classList.remove('dragging');el.style.removeProperty('--drag-x');el.style.removeProperty('--drag-y');};
- el.addEventListener('pointerdown',e=>{if(!e.isPrimary||e.button!==0)return;start={x:e.clientX,y:e.clientY};axis=null;el.setPointerCapture(e.pointerId);});
+ el.addEventListener('pointerdown',e=>{if(!e.isPrimary||e.button!==0||e.target.closest('button'))return;start={x:e.clientX,y:e.clientY};axis=null;el.setPointerCapture(e.pointerId);});
  el.addEventListener('pointermove',e=>{if(!start)return;const dx=e.clientX-start.x,dy=e.clientY-start.y;if(!axis){if(Math.max(Math.abs(dx),Math.abs(dy))<12)return;if(Math.abs(dx)>Math.abs(dy)*1.35)axis='x';else if(Math.abs(dy)>Math.abs(dx)*1.35)axis='y';else return;}el.classList.add('dragging');el.style.setProperty('--drag-'+axis,`${Math.max(-35,Math.min(35,(axis==='x'?dx:dy)*.16))}px`);});
  el.addEventListener('pointerup',e=>{if(!start)return;const dx=e.clientX-start.x,dy=e.clientY-start.y,locked=axis;reset();if(locked)suppressUntil=Date.now()+400;if(locked==='x'&&Math.abs(dx)>45)step(dx<0?1:-1,true);if(locked==='y'&&Math.abs(dy)>45)changePhoto(dy<0?1:-1,true);});
  el.addEventListener('pointercancel',reset);el.addEventListener('lostpointercapture',reset);el.addEventListener('click',e=>{if(Date.now()<suppressUntil){e.preventDefault();e.stopImmediatePropagation();}},true);
@@ -113,7 +114,7 @@ document.addEventListener('click',e=>{const b=e.target.closest('button');if(!b||
 });
 document.addEventListener('keydown',e=>{if(view!=='browse'||$('#modal').open||e.altKey||e.ctrlKey||e.metaKey)return;if(['ArrowLeft','ArrowRight'].includes(e.key)){e.preventDefault();step(e.key==='ArrowRight'?1:-1);}if(['ArrowUp','ArrowDown'].includes(e.key)){e.preventDefault();changePhoto(e.key==='ArrowDown'?1:-1);}});
 $('#modal').addEventListener('close',()=>{purchaseIntent=null;});
-window.addEventListener('resize',()=>{if($('#modal').open)placeModal();});
+window.addEventListener('resize',()=>{if($('#modal').open)placeModal();if(view==='browse')fitProductImage();});
 window.visualViewport?.addEventListener('resize',()=>{if($('#modal').open)placeModal();});
 window.addEventListener('popstate',applyRoute);window.addEventListener('hashchange',applyRoute);
 applyRoute();prepareGate();updateBag();
