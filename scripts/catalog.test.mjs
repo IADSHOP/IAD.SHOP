@@ -3,8 +3,8 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import {buildCatalog} from './build-catalog.mjs';
 test('Official product notes and Pages paths',()=>{
- const c=buildCatalog();assert.equal(c.summer.length,2);assert.equal(c.winter.length,2);
- assert.deepEqual(c.summer.map(p=>p.salePrice),[249,239]);assert.deepEqual(c.winter.map(p=>p.salePrice),[490,880]);
+ const c=JSON.parse(fs.readFileSync('catalog.js','utf8').replace(/^window\.CATALOG = /,'').replace(/;\s*$/,''));assert.equal(c.summer.length,2);assert.equal(c.winter.length,5);
+ assert.deepEqual(c.summer.map(p=>p.salePrice),[249,239]);assert.deepEqual(c.winter.map(p=>p.salePrice),[6280,1080,1280,1080,490]);
  for(const products of Object.values(c))for(const p of products){assert.ok(p.colors.length);assert.ok(p.sizes.length);assert.ok(p.sizeInfo);assert.ok(p.tryOn);for(const image of p.images){assert.ok(image.startsWith('./'));assert.ok(fs.existsSync(decodeURIComponent(image)));}}
 });
 
