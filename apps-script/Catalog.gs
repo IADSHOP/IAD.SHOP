@@ -1,5 +1,5 @@
 // Generated from the same catalog as the storefront. Redeploy Apps Script after updating.
-const ORDER_CATALOG_VERSION = "61b3005e3e50ae332d99";
+const ORDER_CATALOG_VERSION = "d5459d39551fa3df8f8d";
 const ORDER_PRODUCTS = [
   {
     "id": "WM003",
@@ -80,8 +80,8 @@ const ORDER_PRODUCTS = [
     "id": "winter-02",
     "season": "winter",
     "name": "MA1 FLIGHT BOMBER",
-    "price": 880,
-    "salePrice": 1080,
+    "price": 2580,
+    "salePrice": 2280,
     "colors": [
       "黑色"
     ],

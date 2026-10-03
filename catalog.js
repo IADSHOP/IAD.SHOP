@@ -117,8 +117,8 @@ window.CATALOG = {
       "id": "winter-02",
       "name": "MA1 FLIGHT BOMBER",
       "season": "winter",
-      "price": 880,
-      "salePrice": 1080,
+      "price": 2580,
+      "salePrice": 2280,
       "colors": [
         "黑色"
       ],
