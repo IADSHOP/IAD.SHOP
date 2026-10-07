@@ -1,99 +1,35 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import {DatabaseSync} from 'node:sqlite';
+import {Orders,default as worker} from '../server/worker.mjs';
+import {PRODUCTS,CATALOG_VERSION} from '../server/catalog.mjs';
+import {orderNumber,newOrderEmails,reportEmail} from '../server/email.mjs';
+const core=globalThis.OrderCore;
+const env={ADMIN_EMAIL:'iad.og.2022@gmail.com',STOREFRONT_URL:'https://iadshop.github.io/IAD.SHOP/',BANK_NAME:'永豐',BANK_CODE:'807',BANK_HOLDER:'測試',BANK_ACCOUNT:'123',BUYER_EMAIL_ENABLED:'false',MAIL_RELAY_URL:'https://example.invalid/exec',MAIL_RELAY_SECRET:'test-only',ALLOWED_ORIGINS:'https://iadshop.github.io',ADMIN_TOKEN:'test-admin'};
+function setup(){const db=new DatabaseSync(':memory:');let alarms=[];const sql={exec(query,...args){const stmt=db.prepare(query);return {toArray:()=>stmt.all(...args)};}};
+ // Cloudflare exec runs immediately; adapt SQLite statements, preserving real transactions.
+ sql.exec=(query,...args)=>{const stmt=db.prepare(query);if(/^\s*(SELECT|PRAGMA)/i.test(query))return {toArray:()=>stmt.all(...args)};stmt.run(...args);return {toArray:()=>[]};};
+ const ctx={storage:{sql,transactionSync(fn){db.exec('BEGIN');try{const value=fn();db.exec('COMMIT');return value;}catch(e){db.exec('ROLLBACK');throw e;}},setAlarm:async v=>alarms.push(v)}};
+ return {service:new Orders(ctx,env),db,ctx};}
+function payload(){const p=PRODUCTS[0],items=[{productId:p.id,season:p.season,color:p.colors[0]||'',size:p.sizes[0]||'',quantity:1}];return {requestId:crypto.randomUUID(),accessToken:'a'.repeat(64),catalogVersion:CATALOG_VERSION,items,contact:{name:'測試買家',phone:'0912345678',email:'buyer@example.com'},delivery:{method:'STORE',receiverName:'測試',receiverPhone:'0912345678',storeType:'SEVEN_ELEVEN',storeName:'測試店',storeCode:'123456'},paymentMethod:'BANK_TRANSFER',buyerNote:'測試勿出貨',expectedTotal:core.quote(items,PRODUCTS,'STORE').total};}
+test('global sequence begins at 088 and persists across object recreation and dates',async()=>{const {service,ctx,db}=setup(),p=payload();const first=await service.perform('createOrder',p);assert.match(first.orderId,/-088$/);const second=await new Orders(ctx,env).perform('createOrder',{...p,requestId:crypto.randomUUID()});assert.match(second.orderId,/-089$/);assert.equal(db.prepare('SELECT value FROM counter').get().value,89);assert.equal(orderNumber(90,new Date('2026-10-08T16:00:00Z')),'IAD-2026-1009-090');});
+test('simultaneous requests and retry create one row and one notification; reject reused id with changed contents',async()=>{const {service,db}=setup(),p=payload();const result=await Promise.all(Array.from({length:12},()=>service.perform('createOrder',p)));assert.equal(new Set(result.map(o=>o.orderId)).size,1);assert.equal(db.prepare('SELECT count(*) AS n FROM orders').get().n,1);assert.equal(db.prepare('SELECT count(*) AS n FROM outbox').get().n,1);await assert.rejects(()=>service.perform('createOrder',{...p,buyerNote:'changed'}),e=>e.code==='IDEMPOTENCY_CONFLICT');});
+test('server price, options, email and required fields validated before sequence allocation',async()=>{const {service,db}=setup(),p=payload();for(const bad of [{expectedTotal:1},{catalogVersion:'old'},{contact:{...p.contact,email:'invalid'}},{items:[{...p.items[0],size:'fake'}]}])await assert.rejects(()=>service.perform('createOrder',{...p,...bad}));assert.equal(db.prepare('SELECT value FROM counter').get().value,87);});
+test('private lookup requires correct capability; reports deduplicate and never imply PAID',async()=>{const {service,db}=setup(),p=payload(),o=await service.perform('createOrder',p);await assert.rejects(()=>service.perform('getOrder',{orderId:o.orderId,accessToken:'b'.repeat(64)}));const report={orderId:o.orderId,accessToken:p.accessToken,reportRequestId:crypto.randomUUID(),reference:'12345',paidAt:'2026-10-08T05:00:00Z',note:'test',amount:o.total};await assert.rejects(()=>service.perform('reportPayment',{...report,amount:1}));await assert.rejects(()=>service.perform('reportPayment',{...report,paidAt:''}));let r=await service.perform('reportPayment',report);assert.equal(r.paymentStatus,'PAYMENT_REPORTED');assert.equal(r.contact,undefined);await service.perform('reportPayment',report);assert.equal(db.prepare('SELECT count(*) AS n FROM reports').get().n,1);assert.equal(db.prepare('SELECT count(*) AS n FROM outbox').get().n,2);const paid=JSON.parse(db.prepare('SELECT data FROM orders').get().data);paid.paymentStatus='PAID';db.prepare('UPDATE orders SET data=?').run(JSON.stringify(paid));await assert.rejects(()=>service.perform('reportPayment',{...report,reportRequestId:crypto.randomUUID()}),e=>e.code==='ORDER_CLOSED');});
+test('cash deposit requires reconciliation note and payment time',async()=>{const {service}=setup(),p={...payload(),paymentMethod:'CASH_DEPOSIT'},o=await service.perform('createOrder',p),r={orderId:o.orderId,accessToken:p.accessToken,reportRequestId:crypto.randomUUID(),amount:o.total,paidAt:'2026-10-08T05:00:00Z',note:''};await assert.rejects(()=>service.perform('reportPayment',r));assert.equal((await service.perform('reportPayment',{...r,note:'ATM交易序號123'})).paymentStatus,'PAYMENT_REPORTED');});
+test('outbox failure retains order; retry sends once and persistence marks success',async()=>{const {service,db}=setup(),p=payload(),original=globalThis.fetch;try{await service.perform('createOrder',p);let calls=0;globalThis.fetch=async()=>{calls++;throw new Error('timeout');};await service.alarm();assert.equal(db.prepare('SELECT state FROM outbox').get().state,'PENDING');assert.equal(db.prepare('SELECT count(*) AS n FROM orders').get().n,1);globalThis.fetch=async()=>{calls++;return Response.json({ok:true});};await service.alarm();await service.alarm();assert.equal(calls,2);assert.equal(db.prepare('SELECT state FROM outbox').get().state,'SENT');}finally{globalThis.fetch=original;}});
+test('email subjects, full items, shipping, bank info and future buyer link',async()=>{const {service}=setup(),p=payload(),o=await service.perform('createOrder',p),full={...o,contact:p.contact,delivery:p.delivery,buyerNote:p.buyerNote};const emails=newOrderEmails(full,p.accessToken,env);assert.ok(emails[0].subject.startsWith('[IAD SHOP 新訂單] IAD-'));assert.ok(emails[0].text.includes(p.contact.email));assert.ok(emails[0].text.includes('單價'));assert.ok(emails[1].text.includes('先付款後出貨'));assert.equal(new URL(emails[1].button.url).hash.includes('token='),true);assert.ok(reportEmail(full,{amount:o.total,paidAt:new Date().toISOString(),createdAt:new Date().toISOString(),reference:'12345',note:''},env).subject.startsWith('[IAD SHOP 付款回報]'));});
+test('CORS and admin authorization fail closed; no browser can forge admin actions',async()=>{const blocked=await worker.fetch(new Request('https://api/orders',{method:'POST',headers:{Origin:'https://evil.invalid'},body:'{}'}),env);assert.equal(blocked.status,403);const admin=await worker.fetch(new Request('https://api/admin',{method:'POST',body:'{}'}),env);assert.equal(admin.status,401);const forged=await worker.fetch(new Request('https://api/orders',{method:'POST',headers:{Origin:'https://iadshop.github.io'},body:JSON.stringify({action:'adminStatus'})}),env);assert.equal(forged.status,400);});
+test('shipping thresholds unchanged; all four methods supported',()=>{assert.equal(core.shipping(598,'STORE'),70);assert.equal(core.shipping(599,'STORE'),0);assert.equal(core.shipping(1498,'HOME'),150);assert.equal(core.shipping(1499,'HOME'),0);assert.deepEqual(core.paymentMethods,['BANK_TRANSFER','CASH_DEPOSIT','CREDIT_CARD','LINE_PAY']);});
 import fs from 'node:fs';
 import vm from 'node:vm';
-import crypto from 'node:crypto';
-import {createRequire} from 'node:module';
-const core=createRequire(import.meta.url)('../order-core.js');
-const products=[{id:'TEE',season:'summer',name:'TEE',price:280,salePrice:249,colors:['白色','黑色'],sizes:['S','M'],images:['./tee.jpg']}];
-function payload(overrides={}){return {action:'createOrder',origin:'http://127.0.0.1:4173',correlationId:crypto.randomUUID(),requestId:crypto.randomUUID(),accessToken:crypto.randomBytes(32).toString('hex'),catalogVersion:'test-version',items:[{productId:'TEE',season:'summer',color:'白色',size:'M',quantity:1}],contact:{name:'測試買家',phone:'0912345678',email:'buyer@example.com'},delivery:{method:'STORE',receiverName:'測試收件人',receiverPhone:'0912345678',storeType:'SEVEN_ELEVEN',storeName:'測試門市',storeCode:'123456'},paymentMethod:'BANK_TRANSFER',buyerNote:'',expectedTotal:319,...overrides};}
-function backend(){
-  const rows=[],props=new Map([['SPREADSHEET_ID','test-sheet']]),cache=new Map();let locked=false,mailCount=0;
-  const range=(r,c,n=1,m=1)=>({getValues:()=>Array.from({length:n},(_,i)=>Array.from({length:m},(_,j)=>rows[r-1+i]?.[c-1+j]??'')),setValue:v=>{rows[r-1][c-1]=v;}});
-  const sheet={getLastRow:()=>rows.length,getRange:range,appendRow:values=>rows.push([...values])};
-  const context={console,OrderCore:core,ORDER_PRODUCTS:products,ORDER_CATALOG_VERSION:'test-version',
-    PropertiesService:{getScriptProperties:()=>({getProperty:k=>props.get(k)||null,setProperty:(k,v)=>props.set(k,v)})},
-    CacheService:{getScriptCache:()=>({get:k=>cache.get(k)||null,put:(k,v)=>cache.set(k,v)})},
-    LockService:{getScriptLock:()=>({tryLock:()=>{if(locked)return false;locked=true;return true;},releaseLock:()=>{locked=false;}})},
-    SpreadsheetApp:{openById:()=>({getSheetByName:()=>sheet}),flush:()=>{}},
-    Utilities:{DigestAlgorithm:{SHA_256:'sha256'},Charset:{UTF_8:'utf8'},computeDigest:(_,s)=>Array.from(crypto.createHash('sha256').update(s).digest(),b=>b>127?b-256:b),formatDate:(_,tz,format)=>format==='yyyyMMdd'?'20261002':'2026100218'},
-    MailApp:{sendEmail:()=>{mailCount++;throw new Error('quota exceeded');}},
-    HtmlService:{XFrameOptionsMode:{ALLOWALL:'all'},createHtmlOutput:content=>({content,setXFrameOptionsMode(){return this;}})},
-    ContentService:{MimeType:{JSON:'json'},createTextOutput:content=>({content,setMimeType(){return this;}})}
-  };
-  vm.createContext(context);
-  vm.runInContext(fs.readFileSync('apps-script/Config.gs','utf8')+'\n'+fs.readFileSync('apps-script/Code.gs','utf8'),context);
-  rows.push(vm.runInContext('ORDER_HEADERS.slice()',context));
-  const call=p=>context.handleRequest_(p);
-  return {call,rows,context,setLock:value=>locked=value,mailCount:()=>mailCount,enableEmail:()=>vm.runInContext('ORDER_CONFIG.sendEmail=true',context),record:n=>Object.fromEntries(rows[0].map((k,i)=>[k,rows[n][i]])),set:(n,key,value)=>rows[n][rows[0].indexOf(key)]=value};
-}
-test('shipping threshold boundaries and independent delivery modes',()=>{
-  assert.equal(core.shipping(598,'STORE'),70);assert.equal(core.shipping(599,'STORE'),0);
-  assert.equal(core.shipping(1498,'HOME'),150);assert.equal(core.shipping(1499,'HOME'),0);
-  assert.throws(()=>core.shipping(10,'COD'));
-});
-test('server derives price and rejects a forged total',()=>{
-  const p=payload();p.items[0].unitPrice=1;p.total=1;
-  assert.equal(core.validateOrder(p,products).total,319);
-  assert.throws(()=>core.validateOrder({...p,expectedTotal:1},products),/金額/);
-});
-test('reject invalid product, options, quantity and duplicate lines',()=>{
-  for(const change of [{productId:'UNKNOWN'},{quantity:0},{quantity:-1},{quantity:1.5},{quantity:100},{color:'紅色'},{size:'XL'}]){
-    const p=payload();Object.assign(p.items[0],change);assert.throws(()=>core.validateOrder(p,products));
-  }
-  const p=payload();p.items.push({...p.items[0]});assert.throws(()=>core.validateOrder(p,products));
-});
-test('contact and both delivery branches are validated',()=>{
-  assert.throws(()=>core.contact({name:'',phone:'0912345678',email:'a@b.co'}));
-  assert.throws(()=>core.contact({name:'A',phone:'0912345678',email:'not-email'}));
-  assert.throws(()=>core.delivery({method:'HOME',receiverName:'A',receiverPhone:'0912345678',postalCode:'100',address:''}));
-  assert.equal(core.delivery({method:'HOME',receiverName:'A',receiverPhone:'0912345678',postalCode:'100',address:'測試地址'}).method,'HOME');
-});
-test('order persisted once; retry reuses id; next order gets next number',()=>{
-  const b=backend(),p=payload(),first=b.call(p),again=b.call(p);
-  assert.equal(first.orderId,'IAD-20261002-001');assert.equal(again.orderId,first.orderId);assert.equal(b.rows.length,2);
-  assert.equal(b.call(payload()).orderId,'IAD-20261002-002');
-  assert.equal(b.record(1).paymentStatus,'PENDING');assert.equal(b.record(1).orderStatus,'NEW');
-  assert.equal(JSON.parse(b.record(1).itemsJson)[0].unitPrice,249);
-  assert.notEqual(b.record(1).accessTokenHash,p.accessToken);
-});
-test('idempotency token or contents cannot be replaced',()=>{
-  const b=backend(),p=payload();b.call(p);
-  assert.throws(()=>b.call({...p,accessToken:'b'.repeat(64)}));
-  assert.throws(()=>b.call({...p,buyerNote:'changed'}));assert.equal(b.rows.length,2);
-});
-test('catalog mismatch and forged total never append an order',()=>{
-  const b=backend();assert.throws(()=>b.call(payload({catalogVersion:'old'})));assert.throws(()=>b.call(payload({expectedTotal:1})));assert.equal(b.rows.length,1);
-});
-test('concurrent lock rejection creates no duplicate or partial row',()=>{
-  const b=backend();b.setLock(true);assert.throws(()=>b.call(payload()),/訂單較多/);assert.equal(b.rows.length,1);b.setLock(false);assert.equal(b.call(payload()).orderId,'IAD-20261002-001');
-});
-test('payment report requires capability token and bank last five digits',()=>{
-  const b=backend(),p=payload(),order=b.call(p),report={action:'reportPayment',orderId:order.orderId,accessToken:p.accessToken,reportRequestId:crypto.randomUUID(),reference:'12345'};
-  assert.throws(()=>b.call({...report,accessToken:'a'.repeat(64)}));
-  assert.throws(()=>b.call({...report,reference:'1234'}));
-  assert.equal(b.call(report).paymentStatus,'PAYMENT_REPORTED');
-  const time=b.record(1).paymentReportedAt;b.call(report);assert.equal(b.record(1).paymentReportedAt,time);
-  assert.equal(b.record(1).paymentReference,'12345');
-});
-test('manual PAID status is never downgraded; cancelled orders cannot report',()=>{
-  const b=backend(),p=payload(),order=b.call(p),report={action:'reportPayment',orderId:order.orderId,accessToken:p.accessToken,reportRequestId:crypto.randomUUID(),reference:'12345'};
-  b.set(1,'paymentStatus','PAID');b.set(1,'orderStatus','SHIPPED');assert.equal(b.call(report).paymentStatus,'PAID');assert.equal(b.record(1).orderStatus,'SHIPPED');
-  b.set(1,'orderStatus','CANCELLED');assert.throws(()=>b.call(report));
-});
-test('LINE PAY and card reports require time or note',()=>{
-  for(const method of ['LINE_PAY','CREDIT_CARD']){assert.throws(()=>core.paymentReport({},method));assert.equal(core.paymentReport({note:'測試付款'},method).note,'測試付款');}
-});
-test('formula-looking customer input is stored as text',()=>{
-  const b=backend(),p=payload({buyerNote:'=IMPORTXML("example")'});b.call(p);assert.ok(b.record(1).buyerNote.startsWith("'="));
-});
-test('email failure leaves saved order successful and never retries mail on duplicate',()=>{
-  const b=backend();b.enableEmail();const p=payload(),order=b.call(p);assert.equal(order.emailStatus,'FAILED');assert.equal(b.rows.length,2);b.call(p);assert.equal(b.mailCount(),1);
-});
-test('private status lookup contains no contact information',()=>{
-  const b=backend(),p=payload(),order=b.call(p),read=b.call({action:'getOrder',orderId:order.orderId,accessToken:p.accessToken});assert.equal(read.customerEmail,undefined);assert.equal(read.customerPhone,undefined);assert.equal(read.total,319);
-});
-test('bridge rejects unapproved origins and returns a correlated result to approved origin',()=>{
-  const b=backend(),p=payload();const bad=b.context.doPost({parameter:{payload:JSON.stringify({...p,origin:'https://evil.example'})}});assert.match(bad.content,/INVALID_ORIGIN/);assert.equal(b.rows.length,1);
-  const good=b.context.doPost({parameter:{payload:JSON.stringify(p)}});assert.match(good.content,/window.top.postMessage/);assert.ok(good.content.includes(p.correlationId));assert.ok(good.content.includes('IAD-20261002-001'));assert.ok(!good.content.includes(p.accessToken));
+test('Gmail relay rejects wrong secret or recipient and deduplicates retries without Sheets',()=>{
+ const props=new Map([['RELAY_SECRET','test-secret']]);let mails=0;
+ const context={JSON,Date,LockService:{getScriptLock:()=>({tryLock:()=>true,releaseLock(){}})},PropertiesService:{getScriptProperties:()=>({getProperty:k=>props.get(k),setProperty:(k,v)=>props.set(k,v),getProperties:()=>Object.fromEntries(props),deleteProperty:k=>props.delete(k)})},MailApp:{getRemainingDailyQuota:()=>100,sendEmail:()=>mails++},ContentService:{MimeType:{JSON:'json'},createTextOutput:v=>({setMimeType:()=>v})}};
+ vm.createContext(context);vm.runInContext(fs.readFileSync('server/GmailRelay.gs','utf8'),context);
+ const p={secret:'test-secret',key:'IAD-2026-1008-088-new-0',message:{to:'iad.og.2022@gmail.com',subject:'Test',text:'Synthetic data'}};
+ const call=p=>JSON.parse(context.doPost({postData:{contents:JSON.stringify(p)}}));
+ assert.equal(call({...p,secret:'wrong'}).ok,false);assert.equal(call({...p,message:{...p.message,to:'buyer@example.com'}}).ok,false);
+ assert.equal(call(p).ok,true);assert.equal(call(p).ok,true);assert.equal(mails,1);
+ assert.equal(fs.readFileSync('server/GmailRelay.gs','utf8').includes('SpreadsheetApp.'),false);
 });

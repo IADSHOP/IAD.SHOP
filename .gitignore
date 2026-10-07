@@ -2,3 +2,9 @@ reference/
 node_modules/
 _site/
 .tools/
+
+.dev.vars*
+.env*
+.wrangler/
+*.sqlite
+*.sqlite-*

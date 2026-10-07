@@ -84,8 +84,8 @@ OPTION OVERLAY 與 INFO 分開內容但沿用同一種霧黑視覺：SELECT OPTI
 本輪變更：index.html、style.css、app.js、catalog.js、scripts/build-catalog.mjs、scripts/catalog.test.mjs、README.md。首頁影片、loading 與 PC 中央手機架構不變。
 
 
-## 第一版購物袋、結帳與訂單
+## 輕量訂單系統
 
-已加入配送計價、四步 CHECKOUT、Google Apps Script 訂單與付款回報、正式付款 QR 圖。Google 部署尚待設定，未設定前最後確認按鈕停用。完整設定、欄位、測試、人工對帳與發布步驟請看 [ORDER-SETUP.md](ORDER-SETUP.md)。
+現有 BAG 和四步 Checkout 接 Cloudflare Workers Free / SQLite 訂單庫，Google Apps Script 只寄店家 Gmail 通知，不使用 Google Sheet。流水號 088 起跨日期累加。雲端服務與 Gmail 授權已完成，寄信連線驗收通過；網站已設定正式 API。買家確認信暫時關閉，付款仍由店家人工確認。請見 [ORDER-SETUP.md](ORDER-SETUP.md)。
 
-商品更新請使用 npm run build，再同步 apps-script/Catalog.gs 到 Google 部署；npm test 驗證商品與訂單規則。
+商品資料變更後執行 node scripts/export-order-catalog.mjs，部署 Worker 後發布網站。所有 Secret 只存雲端設定，GitHub Pages 不發布 server/。

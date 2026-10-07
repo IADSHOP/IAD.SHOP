@@ -1,0 +1,22 @@
+name = "iad-shop-orders"
+main = "worker.mjs"
+compatibility_date = "2026-10-07"
+workers_dev = true
+
+[vars]
+ALLOWED_ORIGINS = "https://iadshop.github.io,http://127.0.0.1:4173,http://localhost:4173"
+STOREFRONT_URL = "https://iadshop.github.io/IAD.SHOP/"
+ADMIN_EMAIL = "iad.og.2022@gmail.com"
+BUYER_EMAIL_ENABLED = "false"
+BANK_NAME = "永豐銀行"
+BANK_CODE = "807"
+BANK_HOLDER = "網癮中年企業社李文傑"
+BANK_ACCOUNT = "19201800126419"
+
+[[durable_objects.bindings]]
+name = "ORDERS"
+class_name = "Orders"
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["Orders"]

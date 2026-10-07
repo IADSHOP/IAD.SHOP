@@ -3,7 +3,7 @@
   const shop = window.IADShopBridge, core = OrderCore, api = window.IADOrderAPI, config = window.IAD_CHECKOUT_CONFIG;
   const $ = s => document.querySelector(s), esc = shop.esc, money = shop.money;
   const products = Object.values(shop.catalog).flat();
-  const labels = {BANK_TRANSFER:'銀行匯款',LINE_PAY:'LINE PAY',CREDIT_CARD:'信用卡',STORE:'店到店',HOME:'宅配',SEVEN_ELEVEN:'7-ELEVEN',FAMILYMART:'FamilyMart'};
+  const labels = {BANK_TRANSFER:'銀行匯款',CASH_DEPOSIT:'無卡存款',LINE_PAY:'LINE PAY',CREDIT_CARD:'線上信用卡',STORE:'店到店',HOME:'宅配',SEVEN_ELEVEN:'7-ELEVEN',FAMILYMART:'FamilyMart'};
   let deliveryMethod = read('iad-delivery','STORE');
   if (!['STORE','HOME'].includes(deliveryMethod)) deliveryMethod='STORE';
   let step=0, busy=false, receipt=read('iad-last-order',null), pending=readSession('iad-pending-order',null), reportId='', reportSignature='';
@@ -33,8 +33,8 @@
   }
   function validateStep(){if(step===0)draft.contact=core.contact(draft.contact);if(step===1)core.delivery(draft.delivery);if(step===2&&!core.paymentMethods.includes(draft.paymentMethod))throw new Error('請選擇付款方式');}
   function paymentMarkup(method,afterOrder=false){
-    if(method==='BANK_TRANSFER')return `<section class="payment-instructions"><h3>BANK TRANSFER / 銀行匯款</h3><p>${esc(config.bank.name)} · ${esc(config.bank.code)}</p><p>戶名：${esc(config.bank.holder)}</p><p class="account-number">${esc(config.bank.account)}</p><button type="button" class="text-action" data-copy-account>COPY ACCOUNT / 複製帳號</button><p>完成匯款後請提交付款回報。</p></section>`;
-    const src=config.qr[method];return `<section class="payment-instructions"><h3>${method==='LINE_PAY'?'LINE PAY':'CREDIT CARD / 信用卡'}</h3><img class="payment-qr" src="${esc(src)}" alt="${labels[method]} 正式付款 QR Code"><a class="text-action" href="${esc(src)}" target="_blank" rel="noopener">開啟完整付款圖</a><a class="text-action" href="${esc(src)}" download>儲存付款圖</a><p>請${method==='LINE_PAY'?'使用 LINE PAY 掃描 QR Code':'掃描 QR Code 完成信用卡付款'}，並輸入訂單總金額。完成後請提交付款回報。</p><p class="muted">使用同一支手機時，可先儲存圖片；若付款 App 不支援相簿掃碼，請在另一個螢幕開啟付款圖。</p></section>`;
+    if(['BANK_TRANSFER','CASH_DEPOSIT'].includes(method))return `<section class="payment-instructions"><h3>${method==='CASH_DEPOSIT'?'CASH DEPOSIT / 無卡存款':'BANK TRANSFER / 銀行匯款'}</h3><p>${esc(config.bank.name)} · ${esc(config.bank.code)}</p><p>戶名：${esc(config.bank.holder)}</p><p class="account-number">${esc(config.bank.account)}</p><button type="button" class="text-action" data-copy-account>COPY ACCOUNT / 複製帳號</button><p>先付款後出貨；完成匯款或無卡存款後，請提交付款回報。</p></section>`;
+    const src=config.qr[method];return `<section class="payment-instructions"><h3>${method==='LINE_PAY'?'LINE PAY':'CREDIT CARD / 信用卡'}</h3><img class="payment-qr" src="${esc(src)}" alt="${labels[method]} 正式付款 QR Code"><a class="text-action" href="${esc(src)}" target="_blank" rel="noopener">開啟完整付款圖</a><a class="text-action" href="${esc(src)}" download>儲存付款圖</a><p>請${method==='LINE_PAY'?'使用 LINE PAY 掃描 QR Code':'掃描 QR Code 完成信用卡付款'}，並輸入訂單總金額。完成後請提交付款回報。</p><p class="muted">尚未串接自動金流；此頁不會自動確認付款成功。使用同一支手機時，可先儲存圖片；若付款 App 不支援相簿掃碼，請在另一個螢幕開啟付款圖。</p></section>`;
   }
   function itemSummary(items){return `<div class="order-items">${items.map(p=>`<div><span>${esc(p.productName)}<small>${esc(p.color||'—')} / ${esc(p.size||'—')} × ${p.quantity}</small></span><strong>${money(p.subtotal)}</strong></div>`).join('')}</div>`;}
   function checkout(){
@@ -79,12 +79,12 @@
     if(!receipt){showBag();return;}
     const status={PENDING:'等待付款',PAYMENT_REPORTED:'等待人工確認',PAID:'已確認收款',FAILED:'付款失敗',REFUNDED:'已退款'};
     const closed=receipt.orderStatus==='CANCELLED'||['PAID','FAILED','REFUNDED'].includes(receipt.paymentStatus);
-    shop.openModal(`<div class="checkout-content order-receipt"><span class="eyebrow">IAD SHOP / ORDER</span><h2 id="modal-title">THANK YOU</h2><p class="order-id">${esc(receipt.orderId)}</p><button class="text-action" data-copy-order>COPY ORDER ID / 複製訂單編號</button><dl class="checkout-totals"><div><dt>TOTAL</dt><dd>${money(receipt.total)}</dd></div><div><dt>PAYMENT</dt><dd>${labels[receipt.paymentMethod]}</dd></div><div><dt>STATUS</dt><dd>${receipt.orderStatus==='CANCELLED'?'訂單已取消':status[receipt.paymentStatus]||esc(receipt.paymentStatus)}</dd></div></dl><button class="text-action" data-refresh-order>更新訂單狀態</button><p class="muted">請保存訂單編號。可從此瀏覽器的 BAG → 最近訂單返回付款頁。</p>${receipt.paymentStatus==='PAYMENT_REPORTED'?'<p class="payment-notice">已收到付款回報，店家尚待對帳。請勿重複付款。</p>':''}${!closed?paymentMarkup(receipt.paymentMethod,true):''}${!closed?`<section class="report-section"><h3>PAYMENT REPORT / 付款回報</h3><form id="report-form">${receipt.paymentMethod==='BANK_TRANSFER'?input('匯款帳號後五碼','reference','','text','required pattern="[0-9]{5}" minlength="5" maxlength="5" inputmode="numeric"'):''}${input('付款時間（選填）','paidAt','','datetime-local')}<label class="field"><span>付款備註${receipt.paymentMethod==='BANK_TRANSFER'?'（選填）':'（或填付款時間）'}</span><textarea name="note" maxlength="300" rows="2"></textarea></label><p id="report-error" class="checkout-error" role="alert"></p><button class="overlay-action" type="submit">提交付款回報</button></form></section>`:''}<p id="order-feedback" role="status" class="muted"></p></div>`,'checkout');
+    shop.openModal(`<div class="checkout-content order-receipt"><span class="eyebrow">IAD SHOP / ORDER</span><h2 id="modal-title">訂單成立</h2><p class="order-id">${esc(receipt.orderId)}</p><button class="text-action" data-copy-order>COPY ORDER ID / 複製訂單編號</button><dl class="checkout-totals"><div><dt>TOTAL</dt><dd>${money(receipt.total)}</dd></div><div><dt>PAYMENT</dt><dd>${labels[receipt.paymentMethod]}</dd></div><div><dt>STATUS</dt><dd>${receipt.orderStatus==='CANCELLED'?'訂單已取消':status[receipt.paymentStatus]||esc(receipt.paymentStatus)}</dd></div></dl><button class="text-action" data-refresh-order>更新訂單狀態</button><p class="muted">IAD SHOP 採先付款後出貨，完成付款並確認款項後才會安排出貨。請保存訂單編號；可從此瀏覽器的 BAG → 最近訂單返回付款頁。</p>${receipt.paymentStatus==='PAYMENT_REPORTED'?'<p class="payment-notice">已收到付款回報，店家尚待對帳。請勿重複付款。</p>':''}${!closed?paymentMarkup(receipt.paymentMethod,true):''}${!closed&&receipt.paymentStatus!=='PAYMENT_REPORTED'?`<section class="report-section"><h3>PAYMENT REPORT / 付款回報</h3><button class="overlay-action" data-open-report>完成付款後回報付款 →</button><form id="report-form" hidden>${input('訂單編號','orderId',receipt.orderId,'text','readonly')}${input('付款方式','paymentMethod',labels[receipt.paymentMethod],'text','readonly')}${receipt.paymentMethod==='BANK_TRANSFER'?input('匯款帳號後五碼','reference','','text','required pattern="[0-9]{5}" minlength="5" maxlength="5" inputmode="numeric"'):''}${input('付款金額','amount',receipt.total,'number','required min="1" step="1"')}${input('付款時間','paidAt','','datetime-local','required')}<label class="field"><span>付款備註${receipt.paymentMethod==='CASH_DEPOSIT'?'（必填：ATM／分行、交易序號等存款資訊）':'（選填）'}</span><textarea name="note" maxlength="300" rows="2" ${receipt.paymentMethod==='CASH_DEPOSIT'?'required':''}></textarea></label><p class="muted">付款回報不代表付款已確認，IAD SHOP 將於實際確認款項後處理訂單。</p><p id="report-error" class="checkout-error" role="alert"></p><button class="overlay-action" type="submit">我已完成付款／提交回報</button></form></section>`:''}<p id="order-feedback" role="status" class="muted"></p></div>`,'checkout');
   }
   async function report(e){e.preventDefault();if(busy)return;const errorEl=$('#report-error');try{
-    const values=Object.fromEntries(new FormData(e.target));
+    const values=Object.fromEntries(new FormData(e.target));values.amount=Number(values.amount);
     if(values.paidAt)values.paidAt=new Date(values.paidAt).toISOString();
-    core.paymentReport(values,receipt.paymentMethod);
+    core.paymentReport(values,receipt.paymentMethod);if(!values.paidAt)throw new Error('請填付款時間');if(values.amount!==receipt.total)throw new Error('付款金額需等於訂單總額');if(receipt.paymentMethod==='CASH_DEPOSIT'&&!values.note?.trim())throw new Error('請填無卡存款資訊');
     const signature=JSON.stringify(values);if(signature!==reportSignature){reportId=crypto.randomUUID();reportSignature=signature;}
     lockUI(true);errorEl.textContent='正在提交付款回報…';
     const order=await api.request('reportPayment',{...values,orderId:receipt.orderId,accessToken:receipt.accessToken,reportRequestId:reportId});
@@ -108,10 +108,13 @@
     if(b.hasAttribute('data-copy-order'))copy(receipt.orderId);
     if(b.hasAttribute('data-recent'))showReceipt();
     if(b.hasAttribute('data-refresh-order'))refreshOrder();
+    if(b.hasAttribute('data-open-report')){b.hidden=true;$('#report-form').hidden=false;$('#report-form input[name=amount]').focus();}
     if(b.hasAttribute('data-resume'))showPending();
     if(b.hasAttribute('data-retry-order'))sendPending();
     if(b.hasAttribute('data-pending-edit')){draft={contact:pending.contact,delivery:pending.delivery,paymentMethod:pending.paymentMethod,buyerNote:pending.buyerNote};deliveryMethod=draft.delivery.method;step=3;checkout();}
   });
   $('#modal').addEventListener('cancel',e=>{if(busy)e.preventDefault();});
+  async function openReportLink(){const params=new URLSearchParams(location.hash.slice(1));const orderId=params.get('order'),token=params.get('token');if(!orderId||!token)return;history.replaceState({},'',location.pathname+location.search);try{const order=await api.request('getOrder',{orderId,accessToken:token});receipt={...order,accessToken:token};store('iad-last-order',receipt);showReceipt();}catch(e){shop.notify(e.message);}}
+  window.addEventListener('hashchange',openReportLink);openReportLink();
   window.IADCommerce={showBag};
 })();

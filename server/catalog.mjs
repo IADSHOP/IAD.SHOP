@@ -1,6 +1,6 @@
-// Generated from the same catalog as the storefront. Redeploy Apps Script after updating.
-const ORDER_CATALOG_VERSION = "d5459d39551fa3df8f8d";
-const ORDER_PRODUCTS = [
+// Generated public product data; no customer records.
+export const CATALOG_VERSION = "d5459d39551fa3df8f8d";
+export const PRODUCTS = [
   {
     "id": "WM003",
     "season": "summer",

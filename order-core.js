@@ -1,6 +1,6 @@
 /* Shared validation and pricing, also copied to Apps Script Core.gs. */
-var OrderCore = (() => {
-  const paymentMethods = ['BANK_TRANSFER', 'LINE_PAY', 'CREDIT_CARD'];
+globalThis.OrderCore = (() => {
+  const paymentMethods = ['BANK_TRANSFER', 'CASH_DEPOSIT', 'CREDIT_CARD', 'LINE_PAY'];
   const deliveryMethods = ['STORE', 'HOME'];
   function fail(code, message) { const e = new Error(message); e.code = code; throw e; }
   function text(value, label, max = 100, required = true) {
@@ -82,4 +82,4 @@ var OrderCore = (() => {
   }
   return {contact, delivery, shipping, quote, validateOrder, paymentReport, paymentMethods, deliveryMethods};
 })();
-if (typeof module !== 'undefined') module.exports = OrderCore;
+if (typeof module !== 'undefined') module.exports = globalThis.OrderCore;
