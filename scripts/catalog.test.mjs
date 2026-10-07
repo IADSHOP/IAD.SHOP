@@ -3,8 +3,11 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import {buildCatalog} from './build-catalog.mjs';
 test('Official product notes and Pages paths',()=>{
- const c=JSON.parse(fs.readFileSync('catalog.js','utf8').replace(/^window\.CATALOG = /,'').replace(/;\s*$/,''));assert.equal(c.summer.length,2);assert.equal(c.winter.length,5);
- assert.deepEqual(c.summer.map(p=>p.salePrice),[249,239]);assert.deepEqual(c.winter.map(p=>p.salePrice),[6280,2280,1280,1080,490]);
+ const c=JSON.parse(fs.readFileSync('catalog.js','utf8').replace(/^window\.CATALOG = /,'').replace(/;\s*$/,''));assert.equal(c.summer.length,2);assert.equal(c.winter.length,6);
+ assert.deepEqual(c.summer.map(p=>p.salePrice),[249,239]);assert.deepEqual(c.winter.map(p=>p.salePrice),[6280,2280,1280,1080,490,5280]);
+ assert.deepEqual(c.winter.map(p=>p.sort),[1,2,3,4,5,6]);
+ for(const [index,count] of [[4,8],[5,6]]){const p=c.winter[index];assert.deepEqual(p.images.map(image=>decodeURIComponent(image).split('/').at(-1)),Array.from({length:count},(_,i)=>String(i+1).padStart(2,'0')+'.jpg'));assert.equal(p.coverImage,p.images[0]);}
+ assert.equal(c.winter[4].id,'winter-1');assert.ok(c.winter[4].tryOn.includes('169/65'));assert.equal(c.winter[5].id,'winter-06');assert.deepEqual(c.winter[5].sizes,['L','XL']);
  for(const products of Object.values(c))for(const p of products){assert.ok(p.colors.length);assert.ok(p.sizes.length);assert.ok(p.sizeInfo);assert.ok(p.tryOn);for(const image of p.images){assert.ok(image.startsWith('./'));assert.ok(fs.existsSync(decodeURIComponent(image)));}}
 });
 

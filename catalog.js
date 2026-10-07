@@ -227,10 +227,6 @@ window.CATALOG = {
       "season": "winter",
       "price": 590,
       "salePrice": 490,
-      "description": "",
-      "material": "",
-      "fit": "",
-      "delivery": "",
       "colors": [
         "灰色",
         "咖啡",
@@ -243,21 +239,64 @@ window.CATALOG = {
         "M",
         "L"
       ],
+      "description": "",
+      "material": "",
+      "fit": "",
+      "delivery": "",
       "sort": 5,
       "featured": false,
       "images": [
-        "./WINTER%E5%95%86%E5%93%81/05%20%E9%87%9D%E7%B9%94%20%E9%95%B7%E8%A2%96%20%E8%8F%AF%E5%A4%AB%E6%A0%BC/3D0539BC-1FF7-42EC-8EC8-4095E5610688_1_105_c.jpeg",
-        "./WINTER%E5%95%86%E5%93%81/05%20%E9%87%9D%E7%B9%94%20%E9%95%B7%E8%A2%96%20%E8%8F%AF%E5%A4%AB%E6%A0%BC/408B7A89-286A-4609-89F6-A2DD62FB4DB3_1_105_c.jpeg",
-        "./WINTER%E5%95%86%E5%93%81/05%20%E9%87%9D%E7%B9%94%20%E9%95%B7%E8%A2%96%20%E8%8F%AF%E5%A4%AB%E6%A0%BC/BB4A5AF9-F538-4780-ADE2-B349F6E43A1B_1_102_o.jpeg",
-        "./WINTER%E5%95%86%E5%93%81/05%20%E9%87%9D%E7%B9%94%20%E9%95%B7%E8%A2%96%20%E8%8F%AF%E5%A4%AB%E6%A0%BC/S__26509322.jpg"
+        "./WINTER%E5%95%86%E5%93%81/05%20%E9%87%9D%E7%B9%94%20%E9%95%B7%E8%A2%96%20%E8%8F%AF%E5%A4%AB%E6%A0%BC/01.jpg",
+        "./WINTER%E5%95%86%E5%93%81/05%20%E9%87%9D%E7%B9%94%20%E9%95%B7%E8%A2%96%20%E8%8F%AF%E5%A4%AB%E6%A0%BC/02.jpg",
+        "./WINTER%E5%95%86%E5%93%81/05%20%E9%87%9D%E7%B9%94%20%E9%95%B7%E8%A2%96%20%E8%8F%AF%E5%A4%AB%E6%A0%BC/03.jpg",
+        "./WINTER%E5%95%86%E5%93%81/05%20%E9%87%9D%E7%B9%94%20%E9%95%B7%E8%A2%96%20%E8%8F%AF%E5%A4%AB%E6%A0%BC/04.jpg",
+        "./WINTER%E5%95%86%E5%93%81/05%20%E9%87%9D%E7%B9%94%20%E9%95%B7%E8%A2%96%20%E8%8F%AF%E5%A4%AB%E6%A0%BC/05.jpg",
+        "./WINTER%E5%95%86%E5%93%81/05%20%E9%87%9D%E7%B9%94%20%E9%95%B7%E8%A2%96%20%E8%8F%AF%E5%A4%AB%E6%A0%BC/06.jpg",
+        "./WINTER%E5%95%86%E5%93%81/05%20%E9%87%9D%E7%B9%94%20%E9%95%B7%E8%A2%96%20%E8%8F%AF%E5%A4%AB%E6%A0%BC/07.jpg",
+        "./WINTER%E5%95%86%E5%93%81/05%20%E9%87%9D%E7%B9%94%20%E9%95%B7%E8%A2%96%20%E8%8F%AF%E5%A4%AB%E6%A0%BC/08.jpg"
       ],
-      "coverImage": "./WINTER%E5%95%86%E5%93%81/05%20%E9%87%9D%E7%B9%94%20%E9%95%B7%E8%A2%96%20%E8%8F%AF%E5%A4%AB%E6%A0%BC/3D0539BC-1FF7-42EC-8EC8-4095E5610688_1_105_c.jpeg",
+      "coverImage": "./WINTER%E5%95%86%E5%93%81/05%20%E9%87%9D%E7%B9%94%20%E9%95%B7%E8%A2%96%20%E8%8F%AF%E5%A4%AB%E6%A0%BC/01.jpg",
       "cutoutImage": null,
       "sizeGuide": "S 衣長65-69 胸圍104-120 袖長54 \nM  衣長69-73 胸圍112-130 袖長56 \nL 衣長73-78 胸圍118-140 袖長58\n#可彈性拉伸3-10CM",
-      "fitReport": "MODEL 170/65 穿M\nMODEL 164/49 穿S\nMODEL 182/70 穿M\nMODEL 167/47 穿S",
+      "fitReport": "圖1-3模特172/47穿Ｍ\n\n\n\n169/65 穿M寬鬆 L手袖長\n\n164/49 穿S微寬鬆 M寬鬆手袖長\n\n182/70 穿S合身 M~L寬鬆\n\n167/47穿S寬鬆",
       "sizeInfo": "S 衣長65-69 胸圍104-120 袖長54 \nM  衣長69-73 胸圍112-130 袖長56 \nL 衣長73-78 胸圍118-140 袖長58\n#可彈性拉伸3-10CM",
-      "tryOn": "MODEL 170/65 穿M\nMODEL 164/49 穿S\nMODEL 182/70 穿M\nMODEL 167/47 穿S",
+      "tryOn": "圖1-3模特172/47穿Ｍ\n\n\n\n169/65 穿M寬鬆 L手袖長\n\n164/49 穿S微寬鬆 M寬鬆手袖長\n\n182/70 穿S合身 M~L寬鬆\n\n167/47穿S寬鬆",
       "source": "WINTER商品/05 針織 長袖 華夫格/商品資訊.txt"
+    },
+    {
+      "id": "winter-06",
+      "name": "STUSSY WORLD TOUR  CREWNECK",
+      "season": "winter",
+      "price": 5980,
+      "salePrice": 5280,
+      "colors": [
+        "灰色"
+      ],
+      "sizes": [
+        "L",
+        "XL"
+      ],
+      "description": "",
+      "material": "",
+      "fit": "",
+      "delivery": "",
+      "sort": 6,
+      "featured": false,
+      "images": [
+        "./WINTER%E5%95%86%E5%93%81/06%20STUSSY%20%E9%87%8D%E7%A3%85%20%E5%A4%A7%E5%AD%B8%E8%A1%9B%E8%A1%A3%20%E4%B8%96%E7%95%8C%E5%B7%A1%E8%BF%B4%E7%B3%BB%E5%88%97%20WORLD%20TOUR%20CREW/01.jpg",
+        "./WINTER%E5%95%86%E5%93%81/06%20STUSSY%20%E9%87%8D%E7%A3%85%20%E5%A4%A7%E5%AD%B8%E8%A1%9B%E8%A1%A3%20%E4%B8%96%E7%95%8C%E5%B7%A1%E8%BF%B4%E7%B3%BB%E5%88%97%20WORLD%20TOUR%20CREW/02.jpg",
+        "./WINTER%E5%95%86%E5%93%81/06%20STUSSY%20%E9%87%8D%E7%A3%85%20%E5%A4%A7%E5%AD%B8%E8%A1%9B%E8%A1%A3%20%E4%B8%96%E7%95%8C%E5%B7%A1%E8%BF%B4%E7%B3%BB%E5%88%97%20WORLD%20TOUR%20CREW/03.jpg",
+        "./WINTER%E5%95%86%E5%93%81/06%20STUSSY%20%E9%87%8D%E7%A3%85%20%E5%A4%A7%E5%AD%B8%E8%A1%9B%E8%A1%A3%20%E4%B8%96%E7%95%8C%E5%B7%A1%E8%BF%B4%E7%B3%BB%E5%88%97%20WORLD%20TOUR%20CREW/04.jpg",
+        "./WINTER%E5%95%86%E5%93%81/06%20STUSSY%20%E9%87%8D%E7%A3%85%20%E5%A4%A7%E5%AD%B8%E8%A1%9B%E8%A1%A3%20%E4%B8%96%E7%95%8C%E5%B7%A1%E8%BF%B4%E7%B3%BB%E5%88%97%20WORLD%20TOUR%20CREW/05.jpg",
+        "./WINTER%E5%95%86%E5%93%81/06%20STUSSY%20%E9%87%8D%E7%A3%85%20%E5%A4%A7%E5%AD%B8%E8%A1%9B%E8%A1%A3%20%E4%B8%96%E7%95%8C%E5%B7%A1%E8%BF%B4%E7%B3%BB%E5%88%97%20WORLD%20TOUR%20CREW/06.jpg"
+      ],
+      "coverImage": "./WINTER%E5%95%86%E5%93%81/06%20STUSSY%20%E9%87%8D%E7%A3%85%20%E5%A4%A7%E5%AD%B8%E8%A1%9B%E8%A1%A3%20%E4%B8%96%E7%95%8C%E5%B7%A1%E8%BF%B4%E7%B3%BB%E5%88%97%20WORLD%20TOUR%20CREW/01.jpg",
+      "cutoutImage": null,
+      "sizeGuide": "L 胸寬62.2 / 衣長73.7 / 袖長67.9 / 肩寬58.4\nXL  胸寬64.8 / 衣長76.2 / 袖長70.5 / 肩寬61",
+      "fitReport": "MODEL 170/65 穿L\nMODEL 164/49 穿L\nMODEL 182/70 穿L~XL\nMODEL 167/47 穿L",
+      "sizeInfo": "L 胸寬62.2 / 衣長73.7 / 袖長67.9 / 肩寬58.4\nXL  胸寬64.8 / 衣長76.2 / 袖長70.5 / 肩寬61",
+      "tryOn": "MODEL 170/65 穿L\nMODEL 164/49 穿L\nMODEL 182/70 穿L~XL\nMODEL 167/47 穿L",
+      "source": "WINTER商品/06 STUSSY 重磅 大學衛衣 世界巡迴系列 WORLD TOUR CREW/商品資訊.txt"
     }
   ]
 };
