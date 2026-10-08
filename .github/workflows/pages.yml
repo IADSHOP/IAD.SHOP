@@ -27,7 +27,9 @@ jobs:
         run: |
           mkdir _site
           cp index.html style.css app.js catalog.js commerce.js commerce.css checkout-config.js order-core.js order-api.js order-catalog-version.js .nojekyll _site/
-          cp -r 首頁影片 SUMMER商品 WINTER商品 assets _site/
+          cp -r SUMMER商品 WINTER商品 assets _site/
+          mkdir _site/首頁影片
+          cp 首頁影片/summer-web.mp4 首頁影片/winter-web.mp4 首頁影片/summer-poster.jpg 首頁影片/winter-poster.jpg _site/首頁影片/
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
