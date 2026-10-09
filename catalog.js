@@ -297,6 +297,120 @@ window.CATALOG = {
       "sizeInfo": "L 胸寬62.2 / 衣長73.7 / 袖長67.9 / 肩寬58.4\nXL  胸寬64.8 / 衣長76.2 / 袖長70.5 / 肩寬61",
       "tryOn": "MODEL 170/65 穿L\nMODEL 164/49 穿L\nMODEL 182/70 穿L~XL\nMODEL 167/47 穿L",
       "source": "WINTER商品/06 STUSSY 重磅 大學衛衣 世界巡迴系列 WORLD TOUR CREW/商品資訊.txt"
+    },
+    {
+      "id": "winter-07",
+      "name": "STÜSSY BASIC SKULLCAP",
+      "season": "winter",
+      "price": 2080,
+      "salePrice": 1880,
+      "colors": [
+        "黑色",
+        "深藍",
+        "水藍"
+      ],
+      "sizes": [
+        "F"
+      ],
+      "description": "",
+      "material": "",
+      "fit": "",
+      "delivery": "",
+      "sort": 7,
+      "featured": false,
+      "images": [
+        "./WINTER%E5%95%86%E5%93%81/07%20STUSSY%20%E5%86%B7%E5%B8%BD%20%E7%B6%93%E5%85%B8%E6%AC%BE/01.jpg",
+        "./WINTER%E5%95%86%E5%93%81/07%20STUSSY%20%E5%86%B7%E5%B8%BD%20%E7%B6%93%E5%85%B8%E6%AC%BE/02.jpg",
+        "./WINTER%E5%95%86%E5%93%81/07%20STUSSY%20%E5%86%B7%E5%B8%BD%20%E7%B6%93%E5%85%B8%E6%AC%BE/03.jpg",
+        "./WINTER%E5%95%86%E5%93%81/07%20STUSSY%20%E5%86%B7%E5%B8%BD%20%E7%B6%93%E5%85%B8%E6%AC%BE/04.jpg",
+        "./WINTER%E5%95%86%E5%93%81/07%20STUSSY%20%E5%86%B7%E5%B8%BD%20%E7%B6%93%E5%85%B8%E6%AC%BE/05.jpg",
+        "./WINTER%E5%95%86%E5%93%81/07%20STUSSY%20%E5%86%B7%E5%B8%BD%20%E7%B6%93%E5%85%B8%E6%AC%BE/07.jpg",
+        "./WINTER%E5%95%86%E5%93%81/07%20STUSSY%20%E5%86%B7%E5%B8%BD%20%E7%B6%93%E5%85%B8%E6%AC%BE/08.jpg",
+        "./WINTER%E5%95%86%E5%93%81/07%20STUSSY%20%E5%86%B7%E5%B8%BD%20%E7%B6%93%E5%85%B8%E6%AC%BE/09.jpg"
+      ],
+      "coverImage": "./WINTER%E5%95%86%E5%93%81/07%20STUSSY%20%E5%86%B7%E5%B8%BD%20%E7%B6%93%E5%85%B8%E6%AC%BE/01.jpg",
+      "cutoutImage": null,
+      "sizeGuide": "",
+      "fitReport": "",
+      "sizeInfo": "",
+      "tryOn": "",
+      "source": "WINTER商品/07 STUSSY 冷帽 經典款/商品資訊.txt"
+    },
+    {
+      "id": "winter-08",
+      "name": "STÜSSY BASIC CUFF BEANIE",
+      "season": "winter",
+      "price": 2080,
+      "salePrice": 1880,
+      "colors": [
+        "黑色",
+        "深藍",
+        "霧粉",
+        "淺灰"
+      ],
+      "sizes": [
+        "F"
+      ],
+      "description": "",
+      "material": "",
+      "fit": "",
+      "delivery": "",
+      "sort": 8,
+      "featured": false,
+      "images": [
+        "./WINTER%E5%95%86%E5%93%81/08%20STUSSY%20%E6%AF%9B%E5%B8%BD%20%E7%B6%93%E5%85%B8%20%E5%8F%8D%E6%91%BA/00.jpg",
+        "./WINTER%E5%95%86%E5%93%81/08%20STUSSY%20%E6%AF%9B%E5%B8%BD%20%E7%B6%93%E5%85%B8%20%E5%8F%8D%E6%91%BA/01.jpg",
+        "./WINTER%E5%95%86%E5%93%81/08%20STUSSY%20%E6%AF%9B%E5%B8%BD%20%E7%B6%93%E5%85%B8%20%E5%8F%8D%E6%91%BA/02.jpg",
+        "./WINTER%E5%95%86%E5%93%81/08%20STUSSY%20%E6%AF%9B%E5%B8%BD%20%E7%B6%93%E5%85%B8%20%E5%8F%8D%E6%91%BA/03.jpg",
+        "./WINTER%E5%95%86%E5%93%81/08%20STUSSY%20%E6%AF%9B%E5%B8%BD%20%E7%B6%93%E5%85%B8%20%E5%8F%8D%E6%91%BA/04.jpg",
+        "./WINTER%E5%95%86%E5%93%81/08%20STUSSY%20%E6%AF%9B%E5%B8%BD%20%E7%B6%93%E5%85%B8%20%E5%8F%8D%E6%91%BA/05.jpg",
+        "./WINTER%E5%95%86%E5%93%81/08%20STUSSY%20%E6%AF%9B%E5%B8%BD%20%E7%B6%93%E5%85%B8%20%E5%8F%8D%E6%91%BA/06.jpg",
+        "./WINTER%E5%95%86%E5%93%81/08%20STUSSY%20%E6%AF%9B%E5%B8%BD%20%E7%B6%93%E5%85%B8%20%E5%8F%8D%E6%91%BA/07.jpg",
+        "./WINTER%E5%95%86%E5%93%81/08%20STUSSY%20%E6%AF%9B%E5%B8%BD%20%E7%B6%93%E5%85%B8%20%E5%8F%8D%E6%91%BA/08.jpg"
+      ],
+      "coverImage": "./WINTER%E5%95%86%E5%93%81/08%20STUSSY%20%E6%AF%9B%E5%B8%BD%20%E7%B6%93%E5%85%B8%20%E5%8F%8D%E6%91%BA/00.jpg",
+      "cutoutImage": null,
+      "sizeGuide": "",
+      "fitReport": "",
+      "sizeInfo": "",
+      "tryOn": "",
+      "source": "WINTER商品/08 STUSSY 毛帽 經典 反摺/商品資訊.txt"
+    },
+    {
+      "id": "winter-09",
+      "name": "STUSSY LEOPARD SKULLCAP",
+      "season": "winter",
+      "price": 2580,
+      "salePrice": 2280,
+      "colors": [
+        "黃色",
+        "粉色"
+      ],
+      "sizes": [
+        "F"
+      ],
+      "description": "",
+      "material": "",
+      "fit": "",
+      "delivery": "",
+      "sort": 9,
+      "featured": false,
+      "images": [
+        "./WINTER%E5%95%86%E5%93%81/09%20STUSSY%20LEOPARD%20SKULLCAP%20%E8%B1%B9%E7%B4%8B%E6%AF%9B%E5%B8%BD/01.jpg",
+        "./WINTER%E5%95%86%E5%93%81/09%20STUSSY%20LEOPARD%20SKULLCAP%20%E8%B1%B9%E7%B4%8B%E6%AF%9B%E5%B8%BD/02.jpg",
+        "./WINTER%E5%95%86%E5%93%81/09%20STUSSY%20LEOPARD%20SKULLCAP%20%E8%B1%B9%E7%B4%8B%E6%AF%9B%E5%B8%BD/03.jpg",
+        "./WINTER%E5%95%86%E5%93%81/09%20STUSSY%20LEOPARD%20SKULLCAP%20%E8%B1%B9%E7%B4%8B%E6%AF%9B%E5%B8%BD/04.jpg",
+        "./WINTER%E5%95%86%E5%93%81/09%20STUSSY%20LEOPARD%20SKULLCAP%20%E8%B1%B9%E7%B4%8B%E6%AF%9B%E5%B8%BD/05.jpg",
+        "./WINTER%E5%95%86%E5%93%81/09%20STUSSY%20LEOPARD%20SKULLCAP%20%E8%B1%B9%E7%B4%8B%E6%AF%9B%E5%B8%BD/06.jpg",
+        "./WINTER%E5%95%86%E5%93%81/09%20STUSSY%20LEOPARD%20SKULLCAP%20%E8%B1%B9%E7%B4%8B%E6%AF%9B%E5%B8%BD/07.jpg"
+      ],
+      "coverImage": "./WINTER%E5%95%86%E5%93%81/09%20STUSSY%20LEOPARD%20SKULLCAP%20%E8%B1%B9%E7%B4%8B%E6%AF%9B%E5%B8%BD/01.jpg",
+      "cutoutImage": null,
+      "sizeGuide": "",
+      "fitReport": "",
+      "sizeInfo": "",
+      "tryOn": "",
+      "source": "WINTER商品/09 STUSSY LEOPARD SKULLCAP 豹紋毛帽/商品資訊.txt"
     }
   ]
 };

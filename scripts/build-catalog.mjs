@@ -15,7 +15,7 @@ export function normalizeOptions(value){
 }
 export function buildWinterCatalog(root=process.cwd(),onlyNumbers=null){
  const folder=groups.winter,group=path.join(root,folder);
- const dirs=fs.readdirSync(group,{withFileTypes:true}).filter(d=>d.isDirectory()&&/^0[1-6](?:\s|$)/.test(d.name)).sort((a,b)=>Number(a.name.match(/^\d+/)[0])-Number(b.name.match(/^\d+/)[0]));
+ const dirs=fs.readdirSync(group,{withFileTypes:true}).filter(d=>d.isDirectory()&&/^0[1-9](?:\s|$)/.test(d.name)).sort((a,b)=>Number(a.name.match(/^\d+/)[0])-Number(b.name.match(/^\d+/)[0]));
  if(dirs.length<5||dirs.some((d,i)=>Number(d.name.match(/^\d+/)[0])!==i+1))throw new Error('WINTER requires consecutive numbered folders starting at 01');
  const saved=JSON.parse(fs.readFileSync(path.join(root,'catalog.js'),'utf8').replace(/^window\.CATALOG = /,'').replace(/;\s*$/,''));
  return dirs.map(d=>{
@@ -27,7 +27,7 @@ export function buildWinterCatalog(root=process.cwd(),onlyNumbers=null){
   const files=fs.readdirSync(base).filter(f=>/\.(jpg|jpeg|webp|png)$/i.test(f));
   if(!files.length||files.some(f=>!/^\d+[ ._-]/.test(f)))throw new Error('Missing numbered image order: '+d.name);
   files.sort((a,b)=>Number(a.match(/^\d+/)[0])-Number(b.match(/^\d+/)[0]));
-  const numbers=files.map(f=>Number(f.match(/^\d+/)[0]));if(numbers[0]!==1||new Set(numbers).size!==numbers.length)throw new Error('Invalid or duplicate image number: '+d.name);
+  const numbers=files.map(f=>Number(f.match(/^\d+/)[0]));if(numbers[0]>1||new Set(numbers).size!==numbers.length)throw new Error('Invalid or duplicate image number: '+d.name);
   const asset=f=>'./'+[folder,d.name,f].map(encodeURIComponent).join('/'),sort=Number(d.name.match(/^\d+/)[0]);
   const sizeGuide=section('尺寸'),fitReport=section('試穿報告');
   return {id:sort===4?'winter-2':sort===5?'winter-1':'winter-0'+sort,name:line('商品名稱')||raw.split('\n')[0].trim(),season:'winter',price:Number(line('售價').replace(/[^\d]/g,'')),salePrice:Number(line('官網價').replace(/[^\d]/g,'')),colors:normalizeOptions(line('顏色')),sizes:normalizeOptions(line('尺寸')),description:line('商品描述')||section('商品描述')||line('簡介')||section('簡介'),material:line('材質')||section('材質'),fit:line('版型')||section('版型'),delivery:line('出貨資訊')||section('出貨資訊')||line('備貨資訊')||section('備貨資訊'),sort,featured:sort===1,images:files.map(asset),coverImage:asset(files[0]),cutoutImage:null,sizeGuide,fitReport,sizeInfo:sizeGuide,tryOn:fitReport,source:[folder,d.name,'商品資訊.txt'].join('/')};
@@ -65,7 +65,7 @@ export function buildCatalog(root=process.cwd()){
 if(process.argv[1]&&path.resolve(process.argv[1])===fileURLToPath(import.meta.url)){
  const selected=process.argv.find(arg=>arg.startsWith('--winter-products='));
  const onlyNumbers=selected?selected.split('=')[1].split(',').map(Number):null;
- if(onlyNumbers&&(!onlyNumbers.length||onlyNumbers.some(n=>!Number.isInteger(n)||n<1||n>6)))throw new Error('Invalid WINTER product selection');
+ if(onlyNumbers&&(!onlyNumbers.length||onlyNumbers.some(n=>!Number.isInteger(n)||n<1||n>9)))throw new Error('Invalid WINTER product selection');
  const winterOnly=process.argv.includes('--winter-only')||!!selected;
  const catalog=winterOnly?JSON.parse(fs.readFileSync('catalog.js','utf8').replace(/^window\.CATALOG = /,'').replace(/;\s*$/,'')):buildCatalog();
  if(winterOnly)catalog.winter=buildWinterCatalog(process.cwd(),onlyNumbers);fs.writeFileSync('catalog.js','window.CATALOG = '+JSON.stringify(catalog,null,2)+';\n');console.log('Catalog generated:',Object.fromEntries(Object.entries(catalog).map(([s,p])=>[s,p.length])));
