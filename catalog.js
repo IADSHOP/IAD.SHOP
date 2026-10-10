@@ -78,6 +78,106 @@ window.CATALOG = {
       "sizeInfo": "衣長33-39 胸圍68-80",
       "tryOn": "MODEL 165/54 \nMODEL 162/52",
       "source": "SUMMER商品/短版 背心 短袖 OFF-SHOULDER CROP/商品資訊.txt"
+    },
+    {
+      "id": "summer-3",
+      "name": "Carhartt WIP Script Bucket Hat",
+      "season": "summer",
+      "price": 1280,
+      "salePrice": 880,
+      "description": "",
+      "material": "",
+      "fit": "",
+      "delivery": "",
+      "sort": 3,
+      "featured": false,
+      "images": [
+        "./SUMMER%E5%95%86%E5%93%81/%E9%85%8D%E4%BB%B6%2003%20Carhartt%20WIP%20Script%20Bucket%20Hat/01.jpg",
+        "./SUMMER%E5%95%86%E5%93%81/%E9%85%8D%E4%BB%B6%2003%20Carhartt%20WIP%20Script%20Bucket%20Hat/02.jpg",
+        "./SUMMER%E5%95%86%E5%93%81/%E9%85%8D%E4%BB%B6%2003%20Carhartt%20WIP%20Script%20Bucket%20Hat/03.jpg",
+        "./SUMMER%E5%95%86%E5%93%81/%E9%85%8D%E4%BB%B6%2003%20Carhartt%20WIP%20Script%20Bucket%20Hat/04.jpg",
+        "./SUMMER%E5%95%86%E5%93%81/%E9%85%8D%E4%BB%B6%2003%20Carhartt%20WIP%20Script%20Bucket%20Hat/05.jpg",
+        "./SUMMER%E5%95%86%E5%93%81/%E9%85%8D%E4%BB%B6%2003%20Carhartt%20WIP%20Script%20Bucket%20Hat/06.jpg"
+      ],
+      "coverImage": "./SUMMER%E5%95%86%E5%93%81/%E9%85%8D%E4%BB%B6%2003%20Carhartt%20WIP%20Script%20Bucket%20Hat/01.jpg",
+      "cutoutImage": null,
+      "colors": [
+        "湖水綠"
+      ],
+      "sizes": [
+        "F"
+      ],
+      "sizeGuide": "",
+      "fitReport": "",
+      "sizeInfo": "",
+      "tryOn": "",
+      "source": "SUMMER商品/配件 03 Carhartt WIP Script Bucket Hat/商品資訊.txt"
+    },
+    {
+      "id": "summer-4",
+      "name": "STUSSY 2Tone Nylon Boonie Hat OG",
+      "season": "summer",
+      "price": 2680,
+      "salePrice": 2280,
+      "description": "",
+      "material": "",
+      "fit": "",
+      "delivery": "",
+      "sort": 4,
+      "featured": false,
+      "images": [
+        "./SUMMER%E5%95%86%E5%93%81/%E9%85%8D%E4%BB%B6%2004%20STUSSY%202Tone%20Nylon%20Boonie%20Hat%20OG/01.jpg",
+        "./SUMMER%E5%95%86%E5%93%81/%E9%85%8D%E4%BB%B6%2004%20STUSSY%202Tone%20Nylon%20Boonie%20Hat%20OG/02.jpg",
+        "./SUMMER%E5%95%86%E5%93%81/%E9%85%8D%E4%BB%B6%2004%20STUSSY%202Tone%20Nylon%20Boonie%20Hat%20OG/03.jpg",
+        "./SUMMER%E5%95%86%E5%93%81/%E9%85%8D%E4%BB%B6%2004%20STUSSY%202Tone%20Nylon%20Boonie%20Hat%20OG/04.jpg",
+        "./SUMMER%E5%95%86%E5%93%81/%E9%85%8D%E4%BB%B6%2004%20STUSSY%202Tone%20Nylon%20Boonie%20Hat%20OG/05.jpg"
+      ],
+      "coverImage": "./SUMMER%E5%95%86%E5%93%81/%E9%85%8D%E4%BB%B6%2004%20STUSSY%202Tone%20Nylon%20Boonie%20Hat%20OG/01.jpg",
+      "cutoutImage": null,
+      "colors": [
+        "黑色"
+      ],
+      "sizes": [
+        "F"
+      ],
+      "sizeGuide": "",
+      "fitReport": "",
+      "sizeInfo": "",
+      "tryOn": "",
+      "source": "SUMMER商品/配件 04 STUSSY 2Tone Nylon Boonie Hat OG/商品資訊.txt"
+    },
+    {
+      "id": "summer-5",
+      "name": "SUPREME Reflective Patch Boonie OG",
+      "season": "summer",
+      "price": 2480,
+      "salePrice": 2080,
+      "description": "",
+      "material": "",
+      "fit": "",
+      "delivery": "",
+      "sort": 5,
+      "featured": false,
+      "images": [
+        "./SUMMER%E5%95%86%E5%93%81/%E9%85%8D%E4%BB%B6%2005%20SUPREME%20Reflective%20Patch%20Boonie%20OG/01.jpg",
+        "./SUMMER%E5%95%86%E5%93%81/%E9%85%8D%E4%BB%B6%2005%20SUPREME%20Reflective%20Patch%20Boonie%20OG/02.jpg",
+        "./SUMMER%E5%95%86%E5%93%81/%E9%85%8D%E4%BB%B6%2005%20SUPREME%20Reflective%20Patch%20Boonie%20OG/03.jpg",
+        "./SUMMER%E5%95%86%E5%93%81/%E9%85%8D%E4%BB%B6%2005%20SUPREME%20Reflective%20Patch%20Boonie%20OG/04.jpg",
+        "./SUMMER%E5%95%86%E5%93%81/%E9%85%8D%E4%BB%B6%2005%20SUPREME%20Reflective%20Patch%20Boonie%20OG/05.jpg"
+      ],
+      "coverImage": "./SUMMER%E5%95%86%E5%93%81/%E9%85%8D%E4%BB%B6%2005%20SUPREME%20Reflective%20Patch%20Boonie%20OG/01.jpg",
+      "cutoutImage": null,
+      "colors": [
+        "軍綠"
+      ],
+      "sizes": [
+        "F"
+      ],
+      "sizeGuide": "",
+      "fitReport": "",
+      "sizeInfo": "",
+      "tryOn": "",
+      "source": "SUMMER商品/配件 05 SUPREME Reflective Patch Boonie OG/商品資訊.txt"
     }
   ],
   "winter": [
@@ -411,6 +511,71 @@ window.CATALOG = {
       "sizeInfo": "",
       "tryOn": "",
       "source": "WINTER商品/09 STUSSY LEOPARD SKULLCAP 豹紋毛帽/商品資訊.txt"
+    },
+    {
+      "id": "winter-10",
+      "name": "STÜSSY WAFFLE BUILT TOUGH SKULLCAP",
+      "season": "winter",
+      "price": 2480,
+      "salePrice": 2180,
+      "colors": [
+        "黑色",
+        "深藍"
+      ],
+      "sizes": [
+        "F"
+      ],
+      "description": "",
+      "material": "",
+      "fit": "",
+      "delivery": "",
+      "sort": 10,
+      "featured": false,
+      "images": [
+        "./WINTER%E5%95%86%E5%93%81/10%20STUSSY%20WAFFLE%20BUILT%20TOUGH%20SKULLCAP/01.jpg",
+        "./WINTER%E5%95%86%E5%93%81/10%20STUSSY%20WAFFLE%20BUILT%20TOUGH%20SKULLCAP/02.jpg",
+        "./WINTER%E5%95%86%E5%93%81/10%20STUSSY%20WAFFLE%20BUILT%20TOUGH%20SKULLCAP/03.jpg",
+        "./WINTER%E5%95%86%E5%93%81/10%20STUSSY%20WAFFLE%20BUILT%20TOUGH%20SKULLCAP/04.jpg",
+        "./WINTER%E5%95%86%E5%93%81/10%20STUSSY%20WAFFLE%20BUILT%20TOUGH%20SKULLCAP/05.jpg"
+      ],
+      "coverImage": "./WINTER%E5%95%86%E5%93%81/10%20STUSSY%20WAFFLE%20BUILT%20TOUGH%20SKULLCAP/01.jpg",
+      "cutoutImage": null,
+      "sizeGuide": "",
+      "fitReport": "",
+      "sizeInfo": "",
+      "tryOn": "",
+      "source": "WINTER商品/10 STUSSY WAFFLE BUILT TOUGH SKULLCAP/商品資訊.txt"
+    },
+    {
+      "id": "winter-11",
+      "name": "STÜSSY BRUSHED OVAL STOCK SKULLCAP",
+      "season": "winter",
+      "price": 2480,
+      "salePrice": 2280,
+      "colors": [
+        "深藍"
+      ],
+      "sizes": [
+        "F"
+      ],
+      "description": "",
+      "material": "",
+      "fit": "",
+      "delivery": "",
+      "sort": 11,
+      "featured": false,
+      "images": [
+        "./WINTER%E5%95%86%E5%93%81/11%20STUSSY%20BRUSHED%20OVAL%20STOCK%20SKULLCAP/01.jpg",
+        "./WINTER%E5%95%86%E5%93%81/11%20STUSSY%20BRUSHED%20OVAL%20STOCK%20SKULLCAP/02.jpg",
+        "./WINTER%E5%95%86%E5%93%81/11%20STUSSY%20BRUSHED%20OVAL%20STOCK%20SKULLCAP/03.jpg"
+      ],
+      "coverImage": "./WINTER%E5%95%86%E5%93%81/11%20STUSSY%20BRUSHED%20OVAL%20STOCK%20SKULLCAP/01.jpg",
+      "cutoutImage": null,
+      "sizeGuide": "",
+      "fitReport": "",
+      "sizeInfo": "",
+      "tryOn": "",
+      "source": "WINTER商品/11 STUSSY BRUSHED OVAL STOCK SKULLCAP/商品資訊.txt"
     }
   ]
 };

@@ -1,0 +1,27 @@
+{
+  "id": "summer-5",
+  "name": "SUPREME Reflective Patch Boonie OG",
+  "sort": 5,
+  "featured": false,
+  "images": [
+    "01.jpg",
+    "02.jpg",
+    "03.jpg",
+    "04.jpg",
+    "05.jpg"
+  ],
+  "coverImage": "01.jpg",
+  "cutoutImage": null,
+  "colors": [
+    "軍綠"
+  ],
+  "sizes": [
+    "F"
+  ],
+  "description": "",
+  "material": "",
+  "fit": "",
+  "delivery": "",
+  "sizeGuide": "",
+  "fitReport": ""
+}

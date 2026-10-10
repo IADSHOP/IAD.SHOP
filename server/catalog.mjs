@@ -1,5 +1,5 @@
 // Generated public product data; no customer records.
-export const CATALOG_VERSION = "ac8df8a6667206250a36";
+export const CATALOG_VERSION = "ba48f265a7c03d8a14f6";
 export const PRODUCTS = [
   {
     "id": "WM003",
@@ -55,6 +55,70 @@ export const PRODUCTS = [
       "./SUMMER%E5%95%86%E5%93%81/%E7%9F%AD%E7%89%88%20%E8%83%8C%E5%BF%83%20%E7%9F%AD%E8%A2%96%20OFF-SHOULDER%20CROP/model%20%E5%9C%96%20(7).jpg"
     ],
     "coverImage": "./SUMMER%E5%95%86%E5%93%81/%E7%9F%AD%E7%89%88%20%E8%83%8C%E5%BF%83%20%E7%9F%AD%E8%A2%96%20OFF-SHOULDER%20CROP/%E7%B4%94%E7%99%BD%E5%BA%95%20%E5%95%86%E5%93%81%E5%9C%96%20(1).jpg"
+  },
+  {
+    "id": "summer-3",
+    "season": "summer",
+    "name": "Carhartt WIP Script Bucket Hat",
+    "price": 1280,
+    "salePrice": 880,
+    "colors": [
+      "湖水綠"
+    ],
+    "sizes": [
+      "F"
+    ],
+    "images": [
+      "./SUMMER%E5%95%86%E5%93%81/%E9%85%8D%E4%BB%B6%2003%20Carhartt%20WIP%20Script%20Bucket%20Hat/01.jpg",
+      "./SUMMER%E5%95%86%E5%93%81/%E9%85%8D%E4%BB%B6%2003%20Carhartt%20WIP%20Script%20Bucket%20Hat/02.jpg",
+      "./SUMMER%E5%95%86%E5%93%81/%E9%85%8D%E4%BB%B6%2003%20Carhartt%20WIP%20Script%20Bucket%20Hat/03.jpg",
+      "./SUMMER%E5%95%86%E5%93%81/%E9%85%8D%E4%BB%B6%2003%20Carhartt%20WIP%20Script%20Bucket%20Hat/04.jpg",
+      "./SUMMER%E5%95%86%E5%93%81/%E9%85%8D%E4%BB%B6%2003%20Carhartt%20WIP%20Script%20Bucket%20Hat/05.jpg",
+      "./SUMMER%E5%95%86%E5%93%81/%E9%85%8D%E4%BB%B6%2003%20Carhartt%20WIP%20Script%20Bucket%20Hat/06.jpg"
+    ],
+    "coverImage": "./SUMMER%E5%95%86%E5%93%81/%E9%85%8D%E4%BB%B6%2003%20Carhartt%20WIP%20Script%20Bucket%20Hat/01.jpg"
+  },
+  {
+    "id": "summer-4",
+    "season": "summer",
+    "name": "STUSSY 2Tone Nylon Boonie Hat OG",
+    "price": 2680,
+    "salePrice": 2280,
+    "colors": [
+      "黑色"
+    ],
+    "sizes": [
+      "F"
+    ],
+    "images": [
+      "./SUMMER%E5%95%86%E5%93%81/%E9%85%8D%E4%BB%B6%2004%20STUSSY%202Tone%20Nylon%20Boonie%20Hat%20OG/01.jpg",
+      "./SUMMER%E5%95%86%E5%93%81/%E9%85%8D%E4%BB%B6%2004%20STUSSY%202Tone%20Nylon%20Boonie%20Hat%20OG/02.jpg",
+      "./SUMMER%E5%95%86%E5%93%81/%E9%85%8D%E4%BB%B6%2004%20STUSSY%202Tone%20Nylon%20Boonie%20Hat%20OG/03.jpg",
+      "./SUMMER%E5%95%86%E5%93%81/%E9%85%8D%E4%BB%B6%2004%20STUSSY%202Tone%20Nylon%20Boonie%20Hat%20OG/04.jpg",
+      "./SUMMER%E5%95%86%E5%93%81/%E9%85%8D%E4%BB%B6%2004%20STUSSY%202Tone%20Nylon%20Boonie%20Hat%20OG/05.jpg"
+    ],
+    "coverImage": "./SUMMER%E5%95%86%E5%93%81/%E9%85%8D%E4%BB%B6%2004%20STUSSY%202Tone%20Nylon%20Boonie%20Hat%20OG/01.jpg"
+  },
+  {
+    "id": "summer-5",
+    "season": "summer",
+    "name": "SUPREME Reflective Patch Boonie OG",
+    "price": 2480,
+    "salePrice": 2080,
+    "colors": [
+      "軍綠"
+    ],
+    "sizes": [
+      "F"
+    ],
+    "images": [
+      "./SUMMER%E5%95%86%E5%93%81/%E9%85%8D%E4%BB%B6%2005%20SUPREME%20Reflective%20Patch%20Boonie%20OG/01.jpg",
+      "./SUMMER%E5%95%86%E5%93%81/%E9%85%8D%E4%BB%B6%2005%20SUPREME%20Reflective%20Patch%20Boonie%20OG/02.jpg",
+      "./SUMMER%E5%95%86%E5%93%81/%E9%85%8D%E4%BB%B6%2005%20SUPREME%20Reflective%20Patch%20Boonie%20OG/03.jpg",
+      "./SUMMER%E5%95%86%E5%93%81/%E9%85%8D%E4%BB%B6%2005%20SUPREME%20Reflective%20Patch%20Boonie%20OG/04.jpg",
+      "./SUMMER%E5%95%86%E5%93%81/%E9%85%8D%E4%BB%B6%2005%20SUPREME%20Reflective%20Patch%20Boonie%20OG/05.jpg"
+    ],
+    "coverImage": "./SUMMER%E5%95%86%E5%93%81/%E9%85%8D%E4%BB%B6%2005%20SUPREME%20Reflective%20Patch%20Boonie%20OG/01.jpg"
   },
   {
     "id": "winter-01",
@@ -278,5 +342,46 @@ export const PRODUCTS = [
       "./WINTER%E5%95%86%E5%93%81/09%20STUSSY%20LEOPARD%20SKULLCAP%20%E8%B1%B9%E7%B4%8B%E6%AF%9B%E5%B8%BD/07.jpg"
     ],
     "coverImage": "./WINTER%E5%95%86%E5%93%81/09%20STUSSY%20LEOPARD%20SKULLCAP%20%E8%B1%B9%E7%B4%8B%E6%AF%9B%E5%B8%BD/01.jpg"
+  },
+  {
+    "id": "winter-10",
+    "season": "winter",
+    "name": "STÜSSY WAFFLE BUILT TOUGH SKULLCAP",
+    "price": 2480,
+    "salePrice": 2180,
+    "colors": [
+      "黑色",
+      "深藍"
+    ],
+    "sizes": [
+      "F"
+    ],
+    "images": [
+      "./WINTER%E5%95%86%E5%93%81/10%20STUSSY%20WAFFLE%20BUILT%20TOUGH%20SKULLCAP/01.jpg",
+      "./WINTER%E5%95%86%E5%93%81/10%20STUSSY%20WAFFLE%20BUILT%20TOUGH%20SKULLCAP/02.jpg",
+      "./WINTER%E5%95%86%E5%93%81/10%20STUSSY%20WAFFLE%20BUILT%20TOUGH%20SKULLCAP/03.jpg",
+      "./WINTER%E5%95%86%E5%93%81/10%20STUSSY%20WAFFLE%20BUILT%20TOUGH%20SKULLCAP/04.jpg",
+      "./WINTER%E5%95%86%E5%93%81/10%20STUSSY%20WAFFLE%20BUILT%20TOUGH%20SKULLCAP/05.jpg"
+    ],
+    "coverImage": "./WINTER%E5%95%86%E5%93%81/10%20STUSSY%20WAFFLE%20BUILT%20TOUGH%20SKULLCAP/01.jpg"
+  },
+  {
+    "id": "winter-11",
+    "season": "winter",
+    "name": "STÜSSY BRUSHED OVAL STOCK SKULLCAP",
+    "price": 2480,
+    "salePrice": 2280,
+    "colors": [
+      "深藍"
+    ],
+    "sizes": [
+      "F"
+    ],
+    "images": [
+      "./WINTER%E5%95%86%E5%93%81/11%20STUSSY%20BRUSHED%20OVAL%20STOCK%20SKULLCAP/01.jpg",
+      "./WINTER%E5%95%86%E5%93%81/11%20STUSSY%20BRUSHED%20OVAL%20STOCK%20SKULLCAP/02.jpg",
+      "./WINTER%E5%95%86%E5%93%81/11%20STUSSY%20BRUSHED%20OVAL%20STOCK%20SKULLCAP/03.jpg"
+    ],
+    "coverImage": "./WINTER%E5%95%86%E5%93%81/11%20STUSSY%20BRUSHED%20OVAL%20STOCK%20SKULLCAP/01.jpg"
   }
 ];
